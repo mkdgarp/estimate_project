@@ -11,11 +11,11 @@
                 <div class="p-6 text-gray-900">
                     {{-- ตรวจสอบ role --}}
                     @if (Auth::user()->role === 'admin')
-                        <p>ยินดีต้อนรับ, แอดมิน!</p>
+                        <p>ยินดีต้อนรับ, แอดมิน! {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '1')
-                        <p>ยินดีต้อนรับ, เจ้าหน้าที่!</p>
+                        <p>ยินดีต้อนรับ, เจ้าหน้าที่! {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '2')
-                        <p>ยินดีต้อนรับ, อาจารย์!</p>
+                        <p>ยินดีต้อนรับ, อาจารย์! {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '3')
                         <p>ยินดีต้อนรับ, หัวหน้าหลักสูตร/สาขา/กลุ่มวิชา!</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '4')

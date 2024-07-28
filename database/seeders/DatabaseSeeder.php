@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'staff@mail.com',
             'password' => bcrypt('123456'),
             'role' => 'user',
-            'rank' => '1', //Admin bypass rank checked
+            'rank' => '1', 
         ]);
 
         User::factory()->create([
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'professor@mail.com',
             'password' => bcrypt('123456'),
             'role' => 'user',
-            'rank' => '2', //Admin bypass rank checked
+            'rank' => '2',
         ]);
     }
 }

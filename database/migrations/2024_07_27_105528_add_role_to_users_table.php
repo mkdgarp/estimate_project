@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->enum('role', ['user', 'admin'])->default('user'); // เพิ่ม role และตั้งค่า default เป็น 'user'
-            $table->enum('rank', ['0', '1', '2', '3', '4', '5', '6'])->default('0'); 
+            $table->enum('rank', ['0', '1', '2', '3', '4', '5', '6'])->default('1'); 
             //0 = ไม่มี,ผู้ดูแลระบบ (ผู้ดูแลระบบ จะถูกยกเว้นจากการตรวจสอบระดับ rank จึงตั้งค่าพื้นฐานเป็น 0)
             //1 = เจ้าหน้าที่
             //2 = อาจารย์
