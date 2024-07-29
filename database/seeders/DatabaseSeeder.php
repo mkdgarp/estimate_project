@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Workload;
+use App\Models\SubWorkload;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -72,6 +73,29 @@ class DatabaseSeeder extends Seeder
         Workload::create([
             'name' => 'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะ และมหาวิทยาลัย',
             'description' => '',
+        ]);
+
+        SubWorkload::create([
+            'name' => '1.1 ทดสอบข้อย่อย 1',
+            'workload_id' => 1,
+        ]);
+        SubWorkload::create([
+            'name' => '1.2 ทดสอบข้อย่อย 2',
+            'workload_id' => 1,
+        ]);
+        SubWorkload::create([
+            'name' => '1.3 ทดสอบข้อย่อย 3',
+            'workload_id' => 1,
+        ]);
+
+        SubWorkload::create([
+            'name' => '2.1 ทดสอบข้อย่อย 1',
+            'workload_id' => 2,
+        ]);
+        
+        SubWorkload::create([
+            'name' => '2.2 ทดสอบข้อย่อย 2',
+            'workload_id' => 2,
         ]);
     }
 }
