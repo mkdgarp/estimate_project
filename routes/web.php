@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WorkloadController;
+use App\Http\Controllers\SubworkloadController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -21,6 +23,10 @@ Route::middleware('auth')->group(function () {
 Route::get('/manage', [UserController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('manage');
+
+Route::get('/workload', [WorkloadController::class, 'index'])->middleware(['auth', 'verified'])->name('workload');
+Route::get('/workloads/{id}', [WorkloadController::class, 'show'])->middleware(['auth', 'verified'])->name('workloads.show');
+Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
 
 Route::get('/users/create', [UserController::class, 'create'])
     ->middleware(['auth', 'verified'])

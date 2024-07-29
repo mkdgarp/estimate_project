@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Workload;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -33,15 +34,44 @@ class DatabaseSeeder extends Seeder
             'email' => 'staff@mail.com',
             'password' => bcrypt('123456'),
             'role' => 'user',
-            'rank' => '1', 
+            'rank' => '1',
         ]);
 
         User::factory()->create([
-            'name' => 'Professor',
-            'email' => 'professor@mail.com',
+            'name' => 'นายทดสอบ ระบบ 1',
+            'email' => 'professor1@mail.com',
             'password' => bcrypt('123456'),
             'role' => 'user',
             'rank' => '2',
+        ]);
+
+        User::factory()->create([
+            'name' => 'นายเทส ระบบ 2',
+            'email' => 'professor2@mail.com',
+            'password' => bcrypt('123456'),
+            'role' => 'user',
+            'rank' => '2',
+        ]);
+
+        Workload::create([
+            'name' => 'ภาระงานสอน',
+            'description' => '',
+        ]);
+        Workload::create([
+            'name' => 'ภาระงานวิจัยและงานวิชาการอื่น',
+            'description' => '',
+        ]);
+        Workload::create([
+            'name' => 'ภาระงานบริการวิชาการ',
+            'description' => '',
+        ]);
+        Workload::create([
+            'name' => 'ภาระงานทำนุบำรุงศิลปวัฒนธรรม',
+            'description' => '',
+        ]);
+        Workload::create([
+            'name' => 'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะ และมหาวิทยาลัย',
+            'description' => '',
         ]);
     }
 }

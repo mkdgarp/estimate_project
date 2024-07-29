@@ -1,0 +1,43 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('ภาระงาน') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ลำดับ</th>
+                                <th>ภาระงาน</th>
+                                <th>คิดเป็นภาระงาน<br>(ชั่วโมงต่อสัปดาห์)</th>
+                                <th>เพิ่ม/แก้ไขข้อมูล</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($workloads as $workload)
+                                <tr>
+                                    <td>{{ $workload->id }}</td>
+                                    <td>{{ $workload->name }}</td>
+                                    <td>{{ $workload->totalScore }}</td>
+                                    <td>
+                                        <a href="{{ route('workloads.show', $workload->id) }}" class="btn btn-primary">เพิ่มข้อมูล</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            <tr>
+                                <td colspan="2">ผลรวม</td>
+                                <td>{{ $totalScore }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</x-app-layout>
