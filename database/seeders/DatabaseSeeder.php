@@ -59,11 +59,11 @@ class DatabaseSeeder extends Seeder
             'description' => '',
         ]);
         Workload::create([
-            'name' => 'ภาระงานวิจัยและงานวิชาการอื่น',
+            'name' => 'ภาระงานวิจัยและงานวิชาการอื่นที่ปรากฏเป็นผลงานวิชาการตามหลักเกณฑ์ที่ ก.พ.อ กำหนด',
             'description' => '',
         ]);
         Workload::create([
-            'name' => 'ภาระงานบริการวิชาการ',
+            'name' => 'ภาระงานบริการทางวิชาการ',
             'description' => '',
         ]);
         Workload::create([
@@ -71,31 +71,31 @@ class DatabaseSeeder extends Seeder
             'description' => '',
         ]);
         Workload::create([
-            'name' => 'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะ และมหาวิทยาลัย',
+            'name' => 'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะและมหาวิทยาลัย',
             'description' => '',
         ]);
 
-        SubWorkload::create([
-            'name' => '1.1 ทดสอบข้อย่อย 1',
-            'workload_id' => 1,
-        ]);
-        SubWorkload::create([
-            'name' => '1.2 ทดสอบข้อย่อย 2',
-            'workload_id' => 1,
-        ]);
-        SubWorkload::create([
-            'name' => '1.3 ทดสอบข้อย่อย 3',
-            'workload_id' => 1,
-        ]);
+        // SubWorkload::create([
+        //     'name' => '1.1 ทดสอบข้อย่อย 1',
+        //     'workload_id' => 1,
+        // ]);
+        // SubWorkload::create([
+        //     'name' => '1.2 ทดสอบข้อย่อย 2',
+        //     'workload_id' => 1,
+        // ]);
+        // SubWorkload::create([
+        //     'name' => '1.3 ทดสอบข้อย่อย 3',
+        //     'workload_id' => 1,
+        // ]);
 
-        SubWorkload::create([
-            'name' => '2.1 ทดสอบข้อย่อย 1',
-            'workload_id' => 2,
-        ]);
+        // SubWorkload::create([
+        //     'name' => '2.1 ทดสอบข้อย่อย 1',
+        //     'workload_id' => 2,
+        // ]);
         
-        SubWorkload::create([
-            'name' => '2.2 ทดสอบข้อย่อย 2',
-            'workload_id' => 2,
-        ]);
+        // SubWorkload::create([
+        //     'name' => '2.2 ทดสอบข้อย่อย 2',
+        //     'workload_id' => 2,
+        // ]);
     }
 }

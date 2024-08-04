@@ -9,6 +9,9 @@ use App\Http\Controllers\SubworkloadController;
 Route::get('/', function () {
     return view('auth.login');
 });
+Route::get('/testtest', function () {
+    return view('test');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
