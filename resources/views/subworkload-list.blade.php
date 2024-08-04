@@ -72,8 +72,7 @@
                                                                                     @if (
                                                                                         $select_workload->list_subworkloads_child_id != null &&
                                                                                             $select_workload->list_subworkloads_child_id == $list_subworkload->id)
-                                                                                        <option
-                                                                                            value="1"
+                                                                                        <option value="1"
                                                                                             data-factor="{{ $select_workload->factor }}">
                                                                                             {{ $select_workload->name }}
                                                                                         </option>
