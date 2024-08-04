@@ -29,19 +29,16 @@
                     <pre>{{ $data }}</pre>
                 @endforeach  --}}
 
-                        <div class="accordion " id="accordionPanelsStayOpenExample">
+                        {{-- <div class="accordion " id="accordionPanelsStayOpenExample"> --}}
                             @foreach ($hierarchicalData as $index => $subworkload)
-                                <div class="accordion-item mb-3">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#panelsStayOpen-{{ $index }}" aria-expanded="true"
-                                            aria-controls="panelsStayOpen-{{ $index }}">
-                                            {{ $subworkload['subworkload']->name }}
-                                        </button>
-                                    </h2>
+                                {{-- <div class="accordion-item mb-3"> --}}
+                                    <div class="bg-primary-subtle p-3 rounded-left rounded-right">
+                                        {{ $subworkload['subworkload']->name }}
+                                    </div>
 
-                                    <div id="panelsStayOpen-{{ $index }}" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
+                                    {{-- <div id="panelsStayOpen-{{ $index }}"
+                                        class="accordion-collapse collapse show">
+                                        <div class="accordion-body"> --}}
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -102,14 +99,14 @@
                                                     @endforeach
                                                 </tbody>
                                             </table>
-                                        </div>
+                                        {{-- </div>
                                     </div>
 
-                                </div>
+                                </div> --}}
                             @endforeach
 
                         </div>
-                        <div class="mt-4 text-center">
+                        <div class="mt text-center mb-4">
                             <x-primary-button type="submit" class="btn btn-primary">บันทึกคะแนน</x-primary-button>
                         </div>
                     </form>
