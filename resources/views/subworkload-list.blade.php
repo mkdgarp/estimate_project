@@ -34,13 +34,13 @@
                                 <div class="accordion-item mb-3">
                                     <h2 class="accordion-header">
                                         <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                            data-bs-target="#panelsStayOpen-{{ $index }}" aria-expanded="false"
+                                            data-bs-target="#panelsStayOpen-{{ $index }}" aria-expanded="true"
                                             aria-controls="panelsStayOpen-{{ $index }}">
                                             {{ $subworkload['subworkload']->name }}
                                         </button>
                                     </h2>
 
-                                    <div id="panelsStayOpen-{{ $index }}" class="accordion-collapse collapse">
+                                    <div id="panelsStayOpen-{{ $index }}" class="accordion-collapse collapse show">
                                         <div class="accordion-body">
                                             <table class="table table-bordered">
                                                 <thead>
