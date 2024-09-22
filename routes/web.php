@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForSuperAdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
@@ -30,6 +31,9 @@ Route::get('/manage', [UserController::class, 'index'])
 Route::get('/workload', [WorkloadController::class, 'index'])->middleware(['auth', 'verified'])->name('workload');
 Route::get('/workloads/{id}', [WorkloadController::class, 'show'])->middleware(['auth', 'verified'])->name('workloads.show');
 Route::get('/summary/{id}', [WorkloadController::class, 'summary'])->middleware(['auth', 'verified'])->name('workloads.summary');
+Route::get('/view-report', [WorkloadController::class, 'view_report'])->middleware(['auth', 'verified'])->name('workloads.view-report');
+route::get('/manage-subworkload-list-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'index'])->name('manage-subworkload-list-by-id');
+route::get('/view-report-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'summary'])->name('summary-by-id');
 Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
 
 Route::get('/users/create', [UserController::class, 'create'])
@@ -39,6 +43,8 @@ Route::get('/users/create', [UserController::class, 'create'])
 Route::post('/users', [UserController::class, 'store'])
     ->middleware(['auth', 'verified'])
     ->name('users.store');
+
+route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
 //     Route::get('/', function () {
 //         return view('auth.login');

@@ -39,9 +39,18 @@ class UserController extends Controller
                 'rank' => $request->rank,
             ]);
 
+            // return $request;
             return redirect()->route('users.create')->with('success', 'User created successfully.');
         } catch (\Exception $e) {
             return redirect()->route('users.create')->with('error', 'There was an error creating the user: ' . $e->getMessage());
         }
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('manage')->with('success', 'ลบผู้ใช้สำเร็จแล้ว');
     }
 }

@@ -57,6 +57,23 @@
                                                 <td>
                                                     {{ $list_subworkload->name }}
                                                     @if ($list_subworkload->is_child == 1)
+                                                        {{-- <div class="form-check ps-5 pt-3">
+                                                            @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
+                                                                @if ($select_workload->list_subworkloads_child_id != null && $select_workload->list_subworkloads_child_id == $list_subworkload->id)
+                                                                    <div class="py-2">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="flexRadioDefault"
+                                                                            id="flexRadioDefault{{ $index_select }}"
+                                                                            value="{{ $select_workload->id }}"
+                                                                            data-factor="{{ $select_workload->factor }}">
+                                                                        <label class="form-check-label"
+                                                                            for="flexRadioDefault{{ $index_select }}">
+                                                                            {{ $select_workload->name }}
+                                                                        </label>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        </div> --}}
                                                         <br>
                                                         <div class="m-3">
                                                             <select class="form-select factor-select"
@@ -87,12 +104,19 @@
                                                     @if ($list_subworkload->file_path == '')
                                                         <input class="form-control form-control-sm formFileSm"
                                                             name="files[{{ $list_subworkload->id }}]" type="file">
+
+                                                        {{-- id={{$list_subworkload->id}} --}}
                                                     @else
                                                         {{-- <input class="form-control form-control-sm formFileSm"
                                                             name="files[{{ $list_subworkload->id }}]" type="file"><br> --}}
-                                                        <embed type="image/jpg"
-                                                            src="{{ asset('storage/' . $list_subworkload->file_path) }}"
-                                                            width="180" height="200">
+                                                        <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                            target="_blank">
+                                                            <embed type="image/jpg"
+                                                                src="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                                width="180" height="200">
+                                                        </a>
+
+                                                        {{-- http://127.0.0.1:8000/storage/uploads/3/9Frrii9q29lHKbLcdM7M5CTm9whfUql5H1ukL2Em.jpg --}}
                                                     @endif
 
                                                 </td>
@@ -102,8 +126,8 @@
                                                     @if ($list_subworkload->is_child == 0)
                                                         <input type="number"
                                                             name="scores[{{ $list_subworkload->id }}]"
-                                                            value="{{ $list_subworkload->score }}" min="0"
-                                                            class="form-control text-center">
+                                                            value="{{ number_format($list_subworkload->score, 0) }}"
+                                                            min="0" class="form-control text-center">
                                                     @else
                                                         1
                                                     @endif

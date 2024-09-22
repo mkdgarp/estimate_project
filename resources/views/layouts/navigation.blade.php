@@ -29,11 +29,23 @@
                         </x-nav-link>
                     </div>
                 @endif
-                
+
                 @if (Auth::user()->role == 'user' && Auth::user()->rank == '2')
                     <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                         <x-nav-link :href="route('workload')" :active="request()->routeIs('workload')">
                             {{ __('ภาระงาน') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
+                @if (Auth::user()->role == 'user' &&
+                        Auth::user()->rank == '3' ||
+                        Auth::user()->rank == '4' ||
+                        Auth::user()->rank == '5' ||
+                        Auth::user()->rank == '6')
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('workloads.view-report')" :active="request()->routeIs('workloads.view-report')">
+                            {{ __('รายงานภาระงาน') }}
                         </x-nav-link>
                     </div>
                 @endif

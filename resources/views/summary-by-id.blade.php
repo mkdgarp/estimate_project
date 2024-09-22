@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $workload->name }}
+            {{ __('สรุปภาระงานสอนของ: ') . $user->name }} <!-- ใช้ชื่อผู้ใช้ -->
         </h2>
     </x-slot>
 
@@ -66,7 +66,6 @@
                                                                     เลือกจำนวนนักศึกษา
                                                                 </option>
                                                                 @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
-
                                                                     @if (
                                                                         $select_workload->list_subworkloads_child_id != null &&
                                                                             $select_workload->list_subworkloads_child_id == $list_subworkload->id)
@@ -74,14 +73,14 @@
                                                                             data-factor="{{ $select_workload->factor }}">
                                                                             {{ $select_workload->name }}
                                                                         </option>
-                                                                        {{ $select_workload->name }}
-                                                                    @endif 
+                                                                    @endif
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     @endif
                                                 </td>
                                                 <td style="width:190px;">
+                                                    {{$list_subworkload->file_path}}
                                                     @if ($list_subworkload->file_path == '')
                                                     <small class="text-muted">ไม่แนบไฟล์</small>
                                                     @else
@@ -121,10 +120,10 @@
                 </form>
 
                 <div class="mt text-center mb-4">
-                    <a href="{{ route('workloads.show', $workload->id) }}">
+                    <a href="../../manage-subworkload-list-by-id/{{$user->id}}/{{$workload->id}}">
                         <x-primary-button type="button" class="btn btn-secondary">แก้ไขข้อมูล</x-primary-button>
                     </a>
-                    <a href="{{ route('workload') }}">
+                    <a href="{{ route('workloads.view-report') }}">
                         <x-primary-button type="button" class="btn btn-primary">ยืนยัน</x-primary-button>
                     </a>
                 </div>
