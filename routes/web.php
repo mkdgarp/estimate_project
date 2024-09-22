@@ -29,6 +29,7 @@ Route::get('/manage', [UserController::class, 'index'])
 
 Route::get('/workload', [WorkloadController::class, 'index'])->middleware(['auth', 'verified'])->name('workload');
 Route::get('/workloads/{id}', [WorkloadController::class, 'show'])->middleware(['auth', 'verified'])->name('workloads.show');
+Route::get('/summary/{id}', [WorkloadController::class, 'summary'])->middleware(['auth', 'verified'])->name('workloads.summary');
 Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
 
 Route::get('/users/create', [UserController::class, 'create'])

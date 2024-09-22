@@ -19,6 +19,9 @@ return new class extends Migration
             $table->decimal('factor')->default(1);
             $table->integer('sort_order')->default(1);
             $table->integer('is_child')->default(0);
+            $table->integer('is_unique')->default(0); //ซับซ้อนหรือไม่ เช่น นอก/ในประเทศ,หัวหน้า/ผู้ร่วม ? 0=ไม่ 1=ใช่จ้า
+            $table->integer('is_leader')->default(0); //หัวหน้าหรือไม่ ? 0=ไม่
+            $table->integer('is_country')->default(0); //ต่างประเทศหรือไม่ ? 0=ไม่
             $table->unsignedBigInteger('list_subworkloads_child_id')->nullable();
             
             $table->timestamps();

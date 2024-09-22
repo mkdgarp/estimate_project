@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-
     {{-- <p>Total Score: {{ $totalScore }}</p> --}}
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -13,12 +12,12 @@
 
                 <div class="p-6 text-gray-900">
                     @if (session('success'))
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-success" role="alert">
                             {{ session('success') }}
                         </div>
                     @endif
                     <h3 class="text-lg font-semibold mb-4">{{ $workload->name }}</h3>
-                    <form method="POST" action="{{ route('subworkloads.updateScores') }}" enctype="multipart/form-data">
+                    <form>
                         @csrf
                         <input type="hidden" name="workload_id" value="{{ $workload->id }}">
 
@@ -59,51 +58,43 @@
                                                     @if ($list_subworkload->is_child == 1)
                                                         <br>
                                                         <div class="m-3">
-                                                            <select class="form-select factor-select"
+                                                            <select class="form-select factor-select bg-white border-0"
                                                                 name="scores[{{ $list_subworkload->id }}]"
                                                                 id="select-{{ $list_subworkload->id }}"
-                                                                data-parent-id="{{ $list_subworkload->id }}">
-                                                                <option value="0"
-                                                                    {{ old('scores.' . $list_subworkload->id, $list_subworkload->score) == 0 ? 'selected' : '' }}>
+                                                                data-parent-id="{{ $list_subworkload->id }}" disabled>
+                                                                <option value="0">
                                                                     เลือกจำนวนนักศึกษา
                                                                 </option>
                                                                 @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
                                                                     @if (
                                                                         $select_workload->list_subworkloads_child_id != null &&
                                                                             $select_workload->list_subworkloads_child_id == $list_subworkload->id)
-                                                                        <option value="{{ $select_workload->id }}"
-                                                                            data-factor="{{ $select_workload->factor }}"
-                                                                            {{ old('scores.' . $list_subworkload->id, $list_subworkload->score) == $select_workload->id || $list_subworkload->score == $select_workload->id ? 'selected' : '' }}>
+                                                                        <option value="1"
+                                                                            data-factor="{{ $select_workload->factor }}">
                                                                             {{ $select_workload->name }}
                                                                         </option>
-                                                                    @endif
+                                                                    @endif 
                                                                 @endforeach
-
                                                             </select>
                                                         </div>
                                                     @endif
                                                 </td>
                                                 <td style="width:190px;">
                                                     @if ($list_subworkload->file_path == '')
-                                                        <input class="form-control form-control-sm formFileSm"
-                                                            name="files[{{ $list_subworkload->id }}]" type="file">
+                                                    <small class="text-muted">ไม่แนบไฟล์</small>
                                                     @else
-                                                        {{-- <input class="form-control form-control-sm formFileSm"
-                                                            name="files[{{ $list_subworkload->id }}]" type="file"><br> --}}
                                                         <embed type="image/jpg"
                                                             src="{{ asset('storage/' . $list_subworkload->file_path) }}"
                                                             width="180" height="200">
                                                     @endif
 
                                                 </td>
-
-
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child == 0)
                                                         <input type="number"
                                                             name="scores[{{ $list_subworkload->id }}]"
                                                             value="{{ $list_subworkload->score }}" min="0"
-                                                            class="form-control text-center">
+                                                            class="form-control text-center bg-white border-0" disabled>
                                                     @else
                                                         1
                                                     @endif
@@ -124,10 +115,17 @@
                         @endforeach
 
                 </div>
-                <div class="mt text-center mb-4">
-                    <x-primary-button type="submit" class="btn btn-primary">บันทึกคะแนน</x-primary-button>
-                </div>
+
                 </form>
+
+                <div class="mt text-center mb-4">
+                    <a href="{{ route('workloads.show', $workload->id) }}">
+                        <x-primary-button type="button" class="btn btn-secondary">แก้ไขข้อมูล</x-primary-button>
+                    </a>
+                    <a href="{{ route('workload') }}">
+                        <x-primary-button type="button" class="btn btn-primary">ยืนยัน</x-primary-button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -146,34 +144,6 @@
                         factorDisplay.innerText = factor ? factor : '';
                     }
                 });
-            });
-        });
-
-        // Ensure to attach this to the form's submit event
-        $(document).ready(function() {
-            $('.formFileSm').on('change', function(event) {
-                const fileInput = $(this)[0]; // Ensure you're selecting the correct input
-                const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-
-                // Check if the fileInput exists
-                if (!fileInput) {
-                    console.error("File input not found!");
-                    return true; // Allow submission if input is not found (optional behavior)
-                }
-
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0]; // Get the first file
-                    if (file.size > maxSize) {
-                        alert('File size must be less than 2MB.');
-
-                        // Clear the file input
-                        $(this).val(''); // jQuery to reset the input
-
-                        return false; // Prevent form submission
-                    }
-                }
-
-                return true; // Allow form submission
             });
         });
     </script>
