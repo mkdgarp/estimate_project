@@ -9,7 +9,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    
+                    <div class="text-end mb-3">
+                        <a href="../print-all-workload/{{ auth()->id() }}">
+                            <button class="btn btn-primary text-end"><i
+                                    class='bx bxs-printer'></i>&nbsp;พิมพ์เอกสารทั้งหมด</button>
+                        </a>
+                    </div>
                     <table class="table table-bordered">
                         <thead>
                             <tr>
@@ -27,10 +32,12 @@
                                     <td>{{ $workload->name }}</td>
                                     <td>{{ $workload->totalScore }}</td>
                                     <td>
-                                        <a href="{{ route('workloads.show', $workload->id) }}" class="btn btn-primary w-100">จัดการข้อมูล</a>
+                                        <a href="{{ route('workloads.show', $workload->id) }}"
+                                            class="btn btn-primary w-100">จัดการข้อมูล</a>
                                     </td>
                                     <td>
-                                        <a  href="{{ route('workloads.summary', $workload->id) }}" class="btn btn-secondary w-100">รายงานสรุป</a>
+                                        <a href="{{ route('workloads.summary', $workload->id) }}"
+                                            class="btn btn-secondary w-100">รายงานสรุป</a>
                                     </td>
                                 </tr>
                             @endforeach

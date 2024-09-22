@@ -223,7 +223,7 @@
 
                 // Redirect after the print dialog is closed
 
-            }, 500);
+            }, 200);
 
             window.onafterprint = function() {
                 window.location.href = "../workload"; // Change to your desired URL
