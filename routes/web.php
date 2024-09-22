@@ -34,6 +34,7 @@ Route::get('/summary/{id}', [WorkloadController::class, 'summary'])->middleware(
 Route::get('/view-report', [WorkloadController::class, 'view_report'])->middleware(['auth', 'verified'])->name('workloads.view-report');
 route::get('/manage-subworkload-list-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'index'])->name('manage-subworkload-list-by-id');
 route::get('/view-report-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'summary'])->name('summary-by-id');
+route::get('/print-all-workload/{userId}', [ForSuperAdminController::class, 'print_all_workload'])->name('print-all-workload');
 Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
 
 Route::get('/users/create', [UserController::class, 'create'])

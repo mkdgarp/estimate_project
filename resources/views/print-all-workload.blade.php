@@ -1,9 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('สรุปภาระงานสอนของ: ') . $user->name }} <!-- ใช้ชื่อผู้ใช้ -->
-        </h2>
-    </x-slot>
     <style>
         @media print {
 
@@ -35,7 +30,6 @@
             .text-none-onprint {
                 display: none !important;
             }
-
         }
     </style>
     {{-- <p>Total Score: {{ $totalScore }}</p> --}}
@@ -49,10 +43,17 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <h3 class="text-lg font-semibold mb-4">{{ $workload->name }}</h3>
-                    <form>
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-lg font-semibold mb-4"></h3>
+                        </div>
+                        <div class="col-3 text-end">
+                            <button class="btn btn-primary text-end autoprint"><i
+                                    class='bx bxs-printer'></i>&nbsp;พิมพ์เอกสาร</button>
+                        </div>
+                    </div>
+                    <form id="formPrint">
                         @csrf
-                        <input type="hidden" name="workload_id" value="{{ $workload->id }}">
 
 
 
@@ -161,12 +162,12 @@
                 </form>
 
                 <div class="mt text-center mb-4">
-                    <a href="../../manage-subworkload-list-by-id/{{ $user->id }}/{{ $workload->id }}">
+                    {{-- <a href="{{ route('workloads.show', $workload->id) }}">
                         <x-primary-button type="button" class="btn btn-warning">แก้ไขข้อมูล</x-primary-button>
-                    </a>
-                    <a href="{{ route('workloads.view-report') }}">
+                    </a> --}}
+                    {{-- <a href="{{ route('workload') }}">
                         <x-primary-button type="button" class="btn btn-success">ยืนยัน</x-primary-button>
-                    </a>
+                    </a> --}}
                 </div>
             </div>
         </div>
@@ -175,6 +176,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
             document.querySelectorAll('.factor-select').forEach(function(selectElement) {
                 selectElement.addEventListener('change', function() {
                     let selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -187,17 +189,71 @@
                     }
                 });
             });
+
         });
 
-        function printDiv() {
-            var printContent = document.getElementById('formPrint').innerHTML;
-            var originalContent = document.body.innerHTML;
 
-            document.body.innerHTML = printContent;
 
-            window.print();
+        $(document).ready(function() {
+            $(document).on('click', '.autoprint', function() {
+                var printContent = document.getElementById('formPrint').innerHTML;
+                var originalContent = document.body.innerHTML;
 
-            document.body.innerHTML = originalContent;
-        }
+                document.body.innerHTML = printContent;
+
+                // Automatically open the print dialog
+                window.print();
+
+                // Restore the original content after printing
+                document.body.innerHTML = originalContent;
+
+                // Redirect after the print dialog is closed
+                window.onafterprint = function() {
+                    window.location.href = "../workload"; // Change to your desired URL
+                    // Or refresh the page
+                    // window.location.reload();
+                };
+            })
+            setTimeout(function() {
+                // Automatically open the print dialog
+                $('.autoprint').click()
+
+                // Restore the original content after printing
+                document.body.innerHTML = originalContent;
+
+                // Redirect after the print dialog is closed
+
+            }, 500);
+
+            window.onafterprint = function() {
+                window.location.href = "../workload"; // Change to your desired URL
+            };
+            // $('.autoprint').click()
+        })
+
+        // Automatically call printDiv when the page loads
+
+
+
+
+        // function printDiv() {
+        //     var printContent = document.getElementById('formPrint').innerHTML;
+        //     var printWindow = window.open('', '', 'height=800,width=600');
+
+        //     // Construct the content for the print window
+        //     printWindow.document.write('<html><head><title>Print</title>');
+        //     printWindow.document.write(
+        //     '<link rel="stylesheet" href="path_to_your_stylesheet.css">'); // Optional: Add your CSS file
+        //     printWindow.document.write('</head><body>');
+        //     printWindow.document.write(printContent);
+        //     printWindow.document.write('</body></html>');
+
+        //     printWindow.document.close();
+        //     printWindow.focus();
+
+        //     // Print the content and close the print window afterward
+        //     printWindow.print();
+        //     printWindow.close();
+        // }
     </script>
 </x-app-layout>

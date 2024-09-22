@@ -45,7 +45,7 @@
                                 <thead>
                                     <tr>
                                         <th>ภาระงานย่อย</th>
-                                        <th>แนบไฟล์</th>
+                                        <th>หลักฐาน</th>
                                         <th class="text-center" width='100px'>จำนวน</th>
                                         <th class="text-center" width='150px'>ภาระงาน</th>
                                         {{-- <th class="text-center" width='150px'>รวมภาระงาน</th> --}}
@@ -99,7 +99,7 @@
                                                             target="_blank">
                                                             <embed type="image/jpg"
                                                                 src="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                                width="180" height="200">
+                                                                width="100" height="120">
                                                         </a>
 
                                                         {{-- http://127.0.0.1:8000/storage/uploads/3/9Frrii9q29lHKbLcdM7M5CTm9whfUql5H1ukL2Em.jpg --}}
@@ -135,6 +135,9 @@
 
                 </div>
                 <div class="mt text-center mb-4">
+                    <a href="{{ route('workload') }}">
+                        <x-primary-button type="button" class="btn btn-secondary">ย้อนกลับ</x-primary-button>
+                    </a>
                     <x-primary-button type="submit" class="btn btn-primary">บันทึกคะแนน</x-primary-button>
                 </div>
                 </form>

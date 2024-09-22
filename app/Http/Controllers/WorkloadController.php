@@ -334,4 +334,6 @@ class WorkloadController extends Controller
         // Return the view with the calculated data
         return view('view-report', compact('workloads', 'hierarchicalData', 'totalScore', 'user'));
     }
+
+    
 }
