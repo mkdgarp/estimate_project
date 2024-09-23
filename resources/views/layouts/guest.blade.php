@@ -20,7 +20,8 @@
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
         <div>
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+                {{-- <x-application-logo class="w-50 h-20 fill-current text-gray-500" /> --}}
+                <img src="../MAIN-LOGO.jfif" alt="" width="250" height="250" style="border-radius: 15px;">
             </a>
         </div>
 

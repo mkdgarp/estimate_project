@@ -97,7 +97,12 @@
                                         @if ($list_subworkload->list_subworkloads_child_id == null)
                                             <tr>
                                                 <td>
-                                                    {{ $list_subworkload->name }}
+                                                    @if ($list_subworkload->sort_order != 0 && $list_subworkload->sort_order != 10)
+                                                        <p class="ps-4 pb-0 mb-0">
+                                                            -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
+                                                    @else
+                                                        {{ $list_subworkload->name }}
+                                                    @endif
                                                     @if ($list_subworkload->is_child == 1)
                                                         {{-- <br> --}}
                                                         {{-- <div class="m-3">
