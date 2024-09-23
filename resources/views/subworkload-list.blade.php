@@ -53,88 +53,70 @@
                                 <tbody>
                                     @foreach ($subworkload['list_subworkloads'] as $index_list => $list_subworkload)
                                         @if ($list_subworkload->list_subworkloads_child_id == null)
-                                            <tr>
+                                            <tr attr-id="{{ $list_subworkload->id }}">
                                                 <td>
-                                                    {{ $list_subworkload->name }}
+                                                    @if ($list_subworkload->sort_order != 0 && $list_subworkload->sort_order != 10)
+                                                        <p class="ps-4 pb-0 mb-0">
+                                                            -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
+                                                    @else
+                                                        {{ $list_subworkload->name }}
+                                                    @endif
                                                     @if ($list_subworkload->is_child == 1)
-                                                        {{-- <div class="form-check ps-5 pt-3">
-                                                            @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
-                                                                @if ($select_workload->list_subworkloads_child_id != null && $select_workload->list_subworkloads_child_id == $list_subworkload->id)
-                                                                    <div class="py-2">
-                                                                        <input class="form-check-input" type="radio"
-                                                                            name="flexRadioDefault"
-                                                                            id="flexRadioDefault{{ $index_select }}"
-                                                                            value="{{ $select_workload->id }}"
-                                                                            data-factor="{{ $select_workload->factor }}">
-                                                                        <label class="form-check-label"
-                                                                            for="flexRadioDefault{{ $index_select }}">
-                                                                            {{ $select_workload->name }}
-                                                                        </label>
-                                                                    </div>
-                                                                @endif
-                                                            @endforeach
-                                                        </div> --}}
                                                         <br>
-                                                        <div class="m-3">
-                                                            <select class="form-select factor-select"
-                                                                name="scores[{{ $list_subworkload->id }}]"
-                                                                id="select-{{ $list_subworkload->id }}"
-                                                                data-parent-id="{{ $list_subworkload->id }}">
-                                                                <option value="0"
-                                                                    {{ old('scores.' . $list_subworkload->id, $list_subworkload->score) == 0 ? 'selected' : '' }}>
-                                                                    เลือกจำนวนนักศึกษา
-                                                                </option>
-                                                                @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
-                                                                    @if (
-                                                                        $select_workload->list_subworkloads_child_id != null &&
-                                                                            $select_workload->list_subworkloads_child_id == $list_subworkload->id)
-                                                                        <option value="{{ $select_workload->id }}"
-                                                                            data-factor="{{ $select_workload->factor }}"
-                                                                            {{ old('scores.' . $list_subworkload->id, $list_subworkload->score) == $select_workload->id || $list_subworkload->score == $select_workload->id ? 'selected' : '' }}>
-                                                                            {{ $select_workload->name }}
-                                                                        </option>
-                                                                    @endif
-                                                                @endforeach
-
-                                                            </select>
+                                                        <div class="m-3"><button
+                                                                class="btn btn-success add-new-subject mb-2">+
+                                                                เพิ่มวิชา</button>
                                                         </div>
                                                     @endif
                                                 </td>
-                                                <td style="width:190px;">
-                                                    @if ($list_subworkload->file_path == '')
-                                                        <input class="form-control form-control-sm formFileSm"
-                                                            name="files[{{ $list_subworkload->id }}]" type="file">
-
-                                                        {{-- id={{$list_subworkload->id}} --}}
-                                                    @else
-                                                        {{-- <input class="form-control form-control-sm formFileSm"
-                                                            name="files[{{ $list_subworkload->id }}]" type="file"><br> --}}
-                                                        <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                            target="_blank">
-                                                            <embed type="image/jpg"
-                                                                src="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                                width="100" height="120">
-                                                        </a>
-
-                                                        {{-- http://127.0.0.1:8000/storage/uploads/3/9Frrii9q29lHKbLcdM7M5CTm9whfUql5H1ukL2Em.jpg --}}
+                                                <td style="width:190px;" class="text-center">
+                                                    @if ($list_subworkload->id != 1)
+                                                        @if ($list_subworkload->file_path == '')
+                                                            <input class="form-control form-control-sm formFileSm"
+                                                                name="files[{{ $list_subworkload->id }}]" type="file"
+                                                                style="display:none;"
+                                                                id="file-{{ $list_subworkload->id }}"
+                                                                onchange="updateFileName(this)">
+                                                            <label for="file-{{ $list_subworkload->id }}"
+                                                                class="rounded border px-2 py-1"
+                                                                style="cursor:pointer;">
+                                                                <i class='bx bx-link'></i> เลือกไฟล์
+                                                            </label>
+                                                            <span id="file-name-{{ $list_subworkload->id }}"
+                                                                class="file-name-display"
+                                                                style="margin-left: 10px;"></span>
+                                                        @else
+                                                            <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                                target="_blank">
+                                                                <embed type="image/jpg"
+                                                                    src="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                                    class="mx-auto" width="100" height="120">
+                                                            </a><button class="btn btn-outline-danger remove-image"
+                                                                type="button"
+                                                                image-by-id="{{ $list_subworkload->id }}"
+                                                                user-id="{{ auth()->id() }}"><i
+                                                                    class='bx bxs-trash'></i> ลบไฟล์</button>
+                                                        @endif
                                                     @endif
 
                                                 </td>
 
 
+
                                                 <td class="text-center">
-                                                    @if ($list_subworkload->is_child == 0)
+                                                    @if ($list_subworkload->id != 1)
                                                         <input type="number"
                                                             name="scores[{{ $list_subworkload->id }}]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
                                                             min="0" class="form-control text-center">
-                                                    @else
-                                                        1
                                                     @endif
+
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    {{ $list_subworkload->factor }}
+                                                    @if ($list_subworkload->id != 1)
+                                                        {{ $list_subworkload->factor }}
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif
@@ -177,6 +159,38 @@
         });
 
         // Ensure to attach this to the form's submit event
+        function updateFileName(input) {
+            const fileInput = input; // รับ input ที่ถูกเปลี่ยน
+            const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+
+            // ตรวจสอบว่า fileInput มีไฟล์หรือไม่
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0]; // รับไฟล์แรก
+                if (file.size > maxSize) {
+                    alert('File size must be less than 2MB.');
+
+                    // ล้างค่า input file
+                    $(fileInput).val(''); // jQuery ล้างค่า input
+
+                    // ล้างชื่อไฟล์ที่แสดง
+                    const fileNameDisplay = $(fileInput).next('.file-name-display');
+                    fileNameDisplay.text(''); // ล้างชื่อไฟล์
+
+                    return false; // ห้ามส่งฟอร์ม
+                }
+
+                // แสดงชื่อไฟล์
+                const fileNameDisplay = $('#file-name-' + fileInput.id.split('-')[1]);
+                fileNameDisplay.text(file.name); // แสดงชื่อไฟล์
+            } else {
+                // หากไม่มีไฟล์ ให้ล้างชื่อไฟล์ที่แสดง
+                const fileNameDisplay = $('#file-name-' + fileInput.id.split('-')[1]);
+                fileNameDisplay.text('');
+            }
+
+            return true; // อนุญาตให้ส่งฟอร์ม
+        }
+
         $(document).ready(function() {
             $('.formFileSm').on('change', function(event) {
                 const fileInput = $(this)[0]; // Ensure you're selecting the correct input
@@ -202,6 +216,70 @@
 
                 return true; // Allow form submission
             });
+
+            var parentId = 1
+            $('.add-new-subject').on('click', function(e) {
+                e.preventDefault();
+
+                // ค้นหา parentId จาก select ที่อยู่ในแถวที่เกี่ยวข้อง
+                // var parentId = $(this).closest('.row-per-subject').find('.factor-select-id').data(
+                //     'parent-id');
+
+
+                // ตรวจสอบว่าพบ parentId หรือไม่
+                // if (parentId === undefined) {
+                //     console.error('parentId is undefined');
+                //     return;
+                // }
+                parentId++
+                var newRow = `
+        <div class="row-per-subject">
+            <div class="row">
+                <div class="col-4">
+                    <select class="form-select factor-select" name="subjects[${parentId}][factor]" required>
+                        <option value="0" selected data-factor="0.00">เลือกจำนวนนักศึกษา</option>
+                        <option value="2.00,นักศึกษาน้อยกว่า ๓๐ คน">๑. นักศึกษาน้อยกว่า ๓๐ คน</option>
+                        <option value="3.00,นักศึกษา ๓๐ - ๖๐ คน">๒. นักศึกษา ๓๐ - ๖๐ คน</option>
+                        <option value="4.00,นักศึกษามากกว่า ๖๐ คน">๓. นักศึกษามากกว่า ๖๐ คน</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <input type="text" class="form-control subject-name" name="subjects[${parentId}][name]" placeholder="ชื่อวิชา" required>
+                </div>
+                <div class="col-3">
+                    <input type="number" class="form-control subject-score" name="subjects[${parentId}][score]" min="0" placeholder="คะแนน" required>
+                </div>
+                <div class="col-1"><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
+            </div>
+            <hr>
+        </div>
+    `;
+                $(this).closest('.m-3').append(newRow);
+            });
+
+            $(document).on('click', '.removerow', function() {
+                $(this).closest('.row-per-subject').remove();
+            })
+
+            $('.remove-image').on('click', function() {
+                const subworkloadId = $(this).attr('image-by-id');
+                const userid = $(this).attr('user-id');
+
+                axios.delete(`/images/${subworkloadId}/${userid}`, {
+                        data: {
+                            id: subworkloadId
+                        } // สำหรับ Axios, ข้อมูลจะถูกส่งใน `data` ของการเรียก DELETE
+                    })
+                    .then(function(response) {
+                        alert('ไฟล์ถูกลบเรียบร้อยแล้ว');
+                        location.reload(); // อัปเดตหน้าใหม่
+                    })
+                    .catch(function(error) {
+                        alert('เกิดข้อผิดพลาด: ' + error.response.data);
+                    });
+            });
+
+
         });
     </script>
 </x-app-layout>

@@ -82,11 +82,12 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="thmain">ภาระงานย่อย</th>
-                                        <th width='120px'>หลักฐาน</th>
-                                        <th class="text-center" width='80px'>จำนวน</th>
-                                        <th class="text-center" width='80px'>ภาระงาน</th>
-                                        <th class="text-center" width='80px'>รวม</th>
+                                        <th class="thmain text-center">(๑)<br>ภาระงาน/กิจกรรม/โครงการ/งาน</th>
+                                        <th class="text-center" width='120px'>(๒)<br>หลักฐาน</th>
+                                        <th class="text-center" width='80px'>(๓)<br>จำนวน</th>
+                                        <th class="text-center" width='80px'>(๔)<br>ภาระงาน</th>
+                                        <th class="text-center" width='80px'>(๕)<br>รวมภาระงาน<br>(๓ x ๔)</th>
+                                        <th class="text-center" width='40px'>หมายเหตุ</th>
                                         {{-- <th class="text-center" width='150px'>รวมภาระงาน</th> --}}
 
                                     </tr>
@@ -141,30 +142,49 @@
                                                             min="0"
                                                             class="form-control text-center bg-white border-0" disabled>
                                                     @else
-                                                        <input type="number"
-                                                            value="1"
-                                                            min="1"
-                                                            class="form-control text-center bg-white border-0" disabled>
+                                                        <input type="number" value="1" min="1"
+                                                            class="form-control text-center bg-white border-0 d-none"
+                                                            disabled>
                                                     @endif
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    {{ $list_subworkload->factor }}
+                                                    @if ($list_subworkload->is_child == 0)
+                                                        {{ $list_subworkload->factor }}
+                                                    @endif
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    {{ number_format($list_subworkload->factor * $list_subworkload->score, 2) }}
+                                                    @if ($list_subworkload->is_child == 0)
+                                                        {{ number_format($list_subworkload->factor * $list_subworkload->score, 2) }}
+                                                    @endif
                                                 </td>
+                                                <td></td>
                                             </tr>
                                         @endif
                                     @endforeach
                                 </tbody>
+                                @if ($index === count($hierarchicalData) - 1)
+                                    <!-- เช็คว่าคือรอบสุดท้าย -->
+                                    <tfoot>
+                                        <tr style="border-bottom: none;">
+                                            <td style="border: none;"></td>
+                                            <td style="border: none;"></td>
+                                            <td colspan="2" style="border-bottom: 1px solid #dee2e6;"><b>รวม</b></td>
+                                            <td style="border-bottom: 1px solid #dee2e6;">{{ $finalScore }}</td>
+                                            <td style="border: none;"></td>
+                                        </tr>
+                                    </tfoot>
+                                @endif
                             </table>
                             {{-- </div>
                                     </div>
 
                                 </div> --}}
+                            {{-- {{$index}} -- {{count($hierarchicalData)}} --}}
                         @endforeach
+
+
 
                 </div>
 

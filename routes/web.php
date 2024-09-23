@@ -41,11 +41,13 @@ Route::get('/users/create', [UserController::class, 'create'])
     ->middleware(['auth', 'verified'])
     ->name('users.create');
 
-Route::post('/users', [UserController::class, 'store'])
-    ->middleware(['auth', 'verified'])
-    ->name('users.store');
+// Route::post('/users', [UserController::class, 'store'])
+//     ->middleware(['auth', 'verified'])
+//     ->name('users.store');
+Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+route::delete('/images/{id}/{userId}', [UserController::class, 'destroy_score'])->name('images.destroy');
 
 //     Route::get('/', function () {
 //         return view('auth.login');

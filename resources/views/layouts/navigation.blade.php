@@ -7,6 +7,8 @@
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+
+                        {{-- <img src="../MAIN-LOGO.jfif" alt=""> --}}
                     </a>
                 </div>
 
@@ -38,8 +40,8 @@
                     </div>
                 @endif
 
-                @if (Auth::user()->role == 'user' &&
-                        Auth::user()->rank == '3' ||
+                @if (
+                    (Auth::user()->role == 'user' && Auth::user()->rank == '3') ||
                         Auth::user()->rank == '4' ||
                         Auth::user()->rank == '5' ||
                         Auth::user()->rank == '6')

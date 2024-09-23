@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->unsignedBigInteger('subworkload_id');
             $table->decimal('factor')->default(1);
-            $table->integer('sort_order')->default(1);
+            $table->string('create_by')->default('SYSTEM');
+            $table->integer('sort_order')->default(0);
             $table->integer('is_child')->default(0);
             $table->integer('is_unique')->default(0); //ซับซ้อนหรือไม่ เช่น นอก/ในประเทศ,หัวหน้า/ผู้ร่วม ? 0=ไม่ 1=ใช่จ้า
             $table->integer('is_leader')->default(0); //หัวหน้าหรือไม่ ? 0=ไม่

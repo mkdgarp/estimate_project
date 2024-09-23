@@ -134,16 +134,21 @@
                                                             class="form-control text-center bg-white border-0" disabled>
                                                     @else
                                                         <input type="number" value="1" min="1"
-                                                            class="form-control text-center bg-white border-0" disabled>
+                                                            class="form-control text-center bg-white border-0 d-none"
+                                                            disabled>
                                                     @endif
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    {{ $list_subworkload->factor }}
+                                                    @if ($list_subworkload->is_child == 0)
+                                                        {{ $list_subworkload->factor }}
+                                                    @endif
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    {{ number_format($list_subworkload->factor * $list_subworkload->score, 2) }}
+                                                    @if ($list_subworkload->is_child == 0)
+                                                        {{ number_format($list_subworkload->factor * $list_subworkload->score, 2) }}
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endif

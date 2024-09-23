@@ -98,6 +98,50 @@ class WorkloadController extends Controller
         return view('workload-list', compact('workloads', 'totalScore'));
     }
 
+    public function calTotalScorePerWorkload($id, $workloadId)
+    {
+        $userId = $id;
+
+        // Fetch all workloads, subworkloads, list_subworkloads, and scores
+        $workloads = Workload::where('id', $workloadId)->get();
+        $subworkloads = Subworkload::all();
+        $listSubworkloads = ListSubworkload::all();
+        $scores = Score::where('user_id', $userId)->get();
+
+        // Create a collection with the joined data
+        foreach ($workloads as $workload) {
+            // Fetch related Subworkloads
+            $workload->subworkloads = $subworkloads->where('workload_id', $workload->id);
+
+            // Initialize totalScore as 0
+            $workload->totalScore = 0;
+
+            // Process each Subworkload
+            foreach ($workload->subworkloads as $subworkload) {
+                // Fetch related list_subworkloads
+                $relatedListSubworkloads = $listSubworkloads->where('subworkload_id', $subworkload->id);
+
+                // Initialize subworkload score
+                $subworkload->score = 0;
+
+                // Sum scores from related list_subworkloads
+                foreach ($relatedListSubworkloads as $listSubworkload) {
+                    // Fetch the score and calculate total score * factor
+                    $score = $scores->where('subworkload_id', $listSubworkload->id)->first();
+                    $subworkload->score += $score ? (float) $score->score * $listSubworkload->factor : 0;
+                }
+
+                // Add to totalScore for the Workload
+                $workload->totalScore += $subworkload->score;
+            }
+        }
+
+        // Calculate the total score for all Workloads
+        $totalScore = (float) $workloads->sum('totalScore'); // Ensure totalScore is a float
+
+        return view('workload-list', compact('workloads', 'totalScore'));
+    }
+
     // public function summary()
     // {
     //     $userId = auth()->id();
@@ -215,8 +259,12 @@ class WorkloadController extends Controller
             })
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('scores.file_path')
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
-            ->orderBy('list_subworkloads.id', 'asc') // Order by list_subworkloads.id ascending
+            // ->orderBy('list_subworkloads.subworkload_id', 'asc') // Order by list_subworkloads.id ascending
+            // ->orderBy('list_subworkloads.id', 'asc') // Order by list_subworkloads.id ascending
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
         // Organize hierarchical data
@@ -261,9 +309,13 @@ class WorkloadController extends Controller
             })
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
-            ->orderBy('list_subworkloads.id', 'asc') // Order by list_subworkloads.id ascending
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
             ->get();
+
 
         // Organize hierarchical data
         $hierarchicalData = [];
@@ -280,12 +332,12 @@ class WorkloadController extends Controller
             // Add the subworkload data to hierarchicalData
             $hierarchicalData[] = $subworkloadArray;
         }
-
+        $finalScore = $list_subworkloads->sum('finalScore');
         // Calculate the total score across all subworkloads
         $totalScore = $list_subworkloads->sum('score');
 
         // Return the view with the calculated data
-        return view('summary', compact('workload', 'hierarchicalData', 'totalScore'));
+        return view('summary', compact('workload', 'hierarchicalData', 'totalScore', 'finalScore'));
     }
 
     public function view_report()
@@ -308,7 +360,9 @@ class WorkloadController extends Controller
             })
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('scores.file_path')
+            // ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
@@ -334,6 +388,4 @@ class WorkloadController extends Controller
         // Return the view with the calculated data
         return view('view-report', compact('workloads', 'hierarchicalData', 'totalScore', 'user'));
     }
-
-    
 }
