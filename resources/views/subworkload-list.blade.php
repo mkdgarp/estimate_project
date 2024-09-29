@@ -54,7 +54,9 @@
                                     @foreach ($subworkload['list_subworkloads'] as $index_list => $list_subworkload)
                                         @if ($list_subworkload->list_subworkloads_child_id == null)
                                             <tr attr-id="{{ $list_subworkload->id }}">
+
                                                 <td>
+                                                    {{-- {{$list_subworkload->sort_order}} --}}
                                                     @if ($list_subworkload->sort_order != 0 && $list_subworkload->sort_order != 10)
                                                         <p class="ps-4 pb-0 mb-0">
                                                             -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
@@ -64,17 +66,25 @@
                                                     @if ($list_subworkload->is_child == 1)
                                                         <br>
                                                         <div class="m-3"><button
-                                                                class="btn btn-success add-new-subject mb-2">+
+                                                                class="btn btn-success add-new-subject mb-2"
+                                                                sort_order="{{ $list_subworkload->sort_order }}"
+                                                                subworkload_id="{{ $list_subworkload->id }}">+
                                                                 เพิ่มวิชา</button>
                                                         </div>
                                                     @endif
+                                                    <div class="m-3"><button
+                                                        class="btn btn-success add-new-subject mb-2"
+                                                        sort_order="{{ $list_subworkload->sort_order }}"
+                                                        subworkload_id="{{ $list_subworkload->id }}">+
+                                                        เพิ่มวิชา</button>
+                                                </div>
                                                 </td>
                                                 <td style="width:190px;" class="text-center">
                                                     @if ($list_subworkload->id != 1)
                                                         @if ($list_subworkload->file_path == '')
                                                             <input class="form-control form-control-sm formFileSm"
-                                                                name="files[{{ $list_subworkload->id }}]" type="file"
-                                                                style="display:none;"
+                                                                name="files[{{ $list_subworkload->id }}]"
+                                                                type="file" style="display:none;"
                                                                 id="file-{{ $list_subworkload->id }}"
                                                                 onchange="updateFileName(this)">
                                                             <label for="file-{{ $list_subworkload->id }}"
@@ -217,20 +227,13 @@
                 return true; // Allow form submission
             });
 
-            var parentId = 1
+
+
             $('.add-new-subject').on('click', function(e) {
+                let parentId = 1
+                let sort_order = $(this).attr('sort_order')
+                let subworkload_id = $(this).attr('subworkload_id')
                 e.preventDefault();
-
-                // ค้นหา parentId จาก select ที่อยู่ในแถวที่เกี่ยวข้อง
-                // var parentId = $(this).closest('.row-per-subject').find('.factor-select-id').data(
-                //     'parent-id');
-
-
-                // ตรวจสอบว่าพบ parentId หรือไม่
-                // if (parentId === undefined) {
-                //     console.error('parentId is undefined');
-                //     return;
-                // }
                 parentId++
                 var newRow = `
         <div class="row-per-subject">
@@ -248,6 +251,8 @@
                 </div>
                 <div class="col-3">
                     <input type="number" class="form-control subject-score" name="subjects[${parentId}][score]" min="0" placeholder="คะแนน" required>
+                    <input type="text" class="form-control subject-score" name="subjects[${parentId}][sort_order]" value="${sort_order}">
+                    <input type="text" class="form-control subject-score" name="subjects[${parentId}][subworkload_id]" value="${subworkload_id}">
                 </div>
                 <div class="col-1"><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
             </div>

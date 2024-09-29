@@ -157,6 +157,7 @@ class SubworkloadController extends Controller
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048',
             'subjects.*.name' => 'required|string|max:255',  // Validate subject names
         ]);
+        a
         // อัปเดตหรือสร้างข้อมูลของ subjects ใหม่
         if ($subjects) {
             foreach ($subjects as $parentId => $subject) {
