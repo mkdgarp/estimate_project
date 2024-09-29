@@ -219,40 +219,48 @@
             });
 
             var parentId = 1
-            $('.add-new-subject').on('click', function(e) {
+            $(document).on('click', '.add-new-subject', function(e) {
+                let sort_order = $(this).attr('sort_order')
+                let subworkload_id = $(this).attr('subworkload_id')
+                let list_id = $(this).attr('list_id')
                 e.preventDefault();
-
-                // ค้นหา parentId จาก select ที่อยู่ในแถวที่เกี่ยวข้อง
-                // var parentId = $(this).closest('.row-per-subject').find('.factor-select-id').data(
-                //     'parent-id');
-
-
-                // ตรวจสอบว่าพบ parentId หรือไม่
-                // if (parentId === undefined) {
-                //     console.error('parentId is undefined');
-                //     return;
-                // }
-                parentId++
+                console.log(parentIdFirst)
+                parentIdFirst++
                 var newRow = `
         <div class="row-per-subject">
             <div class="row">
-                <div class="col-4">
-                    <select class="form-select factor-select" name="subjects[${parentId}][factor]" required>
-                        <option value="0" selected data-factor="0.00">เลือกจำนวนนักศึกษา</option>
-                        <option value="2.00,นักศึกษาน้อยกว่า ๓๐ คน">๑. นักศึกษาน้อยกว่า ๓๐ คน</option>
-                        <option value="3.00,นักศึกษา ๓๐ - ๖๐ คน">๒. นักศึกษา ๓๐ - ๖๐ คน</option>
-                        <option value="4.00,นักศึกษามากกว่า ๖๐ คน">๓. นักศึกษามากกว่า ๖๐ คน</option>
-                    </select>
+                <div class="col-5">
+                    <label class="form-label">ชื่อภาระงาน</label>
+                    <input type="text" class="form-control subject-name" name="subjects[${parentIdFirst}][name]" placeholder="ชื่อภาระงาน" required>
                 </div>
-                <div class="col-4">
-                    <input type="text" class="form-control subject-name" name="subjects[${parentId}][name]" placeholder="ชื่อวิชา" required>
+                <div class="col-2">
+                    <label class="form-label">จำนวน</label>
+                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][score]" min="0" placeholder="จำนวน" required>
                 </div>
-                <div class="col-3">
-                    <input type="number" class="form-control subject-score" name="subjects[${parentId}][score]" min="0" placeholder="คะแนน" required>
+                <div class="col-2">
+                    <label class="form-label">ภาระงาน</label>
+                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][factor]" min="0" placeholder="ภาระงาน" required>
+                    <input type="hidden" class="form-control sort_order" name="subjects[${parentIdFirst}][sort_order]" value="${sort_order}">
+                    <input type="hidden" class="form-control subworkload_id" name="subjects[${parentIdFirst}][subworkload_id]" value="${subworkload_id}">
+                    <input type="hidden" class="form-control list_id" name="subjects[${parentIdFirst}][list_id]" value="${list_id}">
                 </div>
-                <div class="col-1"><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
+                <div class="col-2">
+<label class="form-label">&nbsp;</label>
+
+<input class="form-control form-control-sm formFileSm"
+                                name="subjects[${parentIdFirst}][files]" type="file" style="display:none;"
+                                id="file-${parentIdFirst}" onchange="updateFileName(this)">
+                            <label for="file-${parentIdFirst}" class="rounded border px-2 py-1"
+                                style="cursor:pointer;">
+                                <i class='bx bx-link'></i> เลือกไฟล์
+                            </label>
+                            <span id="file-name-${parentIdFirst}" class="file-name-display"
+                                style="margin-left: 10px;"></span>
+
+                </div>
+                <div class="col-1"><label class="form-label">&nbsp;</label><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
             </div>
-            <hr>
+            <br>
         </div>
     `;
                 $(this).closest('.m-3').append(newRow);

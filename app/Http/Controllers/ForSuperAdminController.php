@@ -228,6 +228,24 @@ class ForSuperAdminController extends Controller
             ->orderBy('list_subworkloads.sort_order', 'desc')
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
+
+        $z6 = Subworkload::all();
+        $x6 = $z6->pluck('id');
+        $list_6 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x6)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
         // Organize hierarchical data
         $hierarchicalData = [];
 
@@ -251,8 +269,9 @@ class ForSuperAdminController extends Controller
         $total_3 = $list_3->sum('finalScore');
         $total_4 = $list_4->sum('finalScore');
         $total_5 = $list_5->sum('finalScore');
+        $total_subjects = $list_6->sum('finalScore');
 
         // Return the view with the calculated data
-        return view('print-all-workload', compact('user', 'workload', 'hierarchicalData', 'totalScore', 'total_1', 'total_2', 'total_3', 'total_4', 'total_5'));
+        return view('print-all-workload', compact('user', 'workload', 'hierarchicalData', 'totalScore', 'total_1', 'total_2', 'total_3', 'total_4', 'total_5','total_subjects'));
     }
 }

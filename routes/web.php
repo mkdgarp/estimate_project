@@ -48,6 +48,7 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 
 route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 route::delete('/images/{id}/{userId}', [UserController::class, 'destroy_score'])->name('images.destroy');
+route::delete('/remove-subjects/{id}/{userId}', [UserController::class, 'destroy_subjects'])->name('subjects.destroy');
 
 //     Route::get('/', function () {
 //         return view('auth.login');

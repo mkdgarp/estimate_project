@@ -36,6 +36,31 @@
                 display: none !important;
             }
 
+            /* Remove vertical borders */
+            table {
+                border-collapse: collapse !important;
+            }
+
+            table td,
+            table th {
+                border-right: none !important;
+                /* Remove right border */
+                border-left: none !important;
+                /* Remove left border */
+            }
+        }
+
+        /* Remove vertical borders */
+        table {
+            border-collapse: collapse;
+        }
+
+        table td,
+        table th {
+            border-right: none !important;
+            /* Remove right border */
+            border-left: none !important;
+            /* Remove left border */
         }
     </style>
     {{-- <p>Total Score: {{ $totalScore }}</p> --}}
@@ -79,7 +104,7 @@
                             {{-- <div id="panelsStayOpen-{{ $index }}"
                                         class="accordion-collapse collapse show">
                                         <div class="accordion-body"> --}}
-                            <table class="table table-bordered">
+                            <table class="table table-bordered border-right">
                                 <thead>
                                     <tr>
                                         <th class="thmain text-center">(๑)<br>ภาระงาน/กิจกรรม/โครงการ/งาน</th>
@@ -97,52 +122,55 @@
                                         @if ($list_subworkload->list_subworkloads_child_id == null)
                                             <tr>
                                                 <td>
-                                                    @if ($list_subworkload->sort_order != 0 && $list_subworkload->sort_order != 10)
-                                                        <p class="ps-4 pb-0 mb-0">
-                                                            -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
-                                                    @else
-                                                        {{ $list_subworkload->name }}
-                                                    @endif
+
                                                     @if ($list_subworkload->is_child == 1)
-                                                        {{-- <br> --}}
-                                                        {{-- <div class="m-3">
-                                                            <select class="form-select factor-select bg-white border-0"
-                                                                name="scores[{{ $list_subworkload->id }}]"
-                                                                id="select-{{ $list_subworkload->id }}"
-                                                                data-parent-id="{{ $list_subworkload->id }}" disabled>
-                                                                <option value="0">
-                                                                    เลือกจำนวนนักศึกษา
-                                                                </option>
-                                                                @foreach ($subworkload['list_subworkloads'] as $index_select => $select_workload)
-                                                                    @if ($select_workload->list_subworkloads_child_id != null && $select_workload->list_subworkloads_child_id == $list_subworkload->id)
-                                                                        <option value="1"
-                                                                            data-factor="{{ $select_workload->factor }}">
-                                                                            {{ $select_workload->name }}
-                                                                        </option>
-                                                                        {{ $select_workload->name }}
-                                                                    @endif
-                                                                    
-                                                                @endforeach
-                                                            </select>
-                                                        </div> --}}
+                                                        {{ $list_subworkload->name }}
+                                                    @else
+                                                        <div class="w-100 d-flex">
+                                                            <p class="ps-4 pb-0 mb-0">
+                                                                -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
+
+                                                        </div>
                                                     @endif
+
+
                                                 </td>
-                                                <td width='120px'>
+                                                <td width='120px' class="text-center">
                                                     @if ($list_subworkload->file_path == '')
                                                         <small class="text-muted text-none-onprint"></small>
                                                     @else
-                                                        <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                            target="_blank">
-                                                            <embed type="image/jpg"
-                                                                src="{{ asset('storage/' . $list_subworkload->file_path) }}"
-                                                                width="100" height="120">
-                                                        </a>
+                                                        @php
+                                                            // Get the file extension
+                                                            $fileExtension = strtolower(
+                                                                pathinfo(
+                                                                    $list_subworkload->file_path,
+                                                                    PATHINFO_EXTENSION,
+                                                                ),
+                                                            );
+                                                        @endphp
+
+                                                        @if (in_array($fileExtension, ['jpg', 'jpeg', 'png']))
+                                                            <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                                target="_blank">
+                                                                <embed type="image/jpg"
+                                                                    src="{{ asset('storage/' . $list_subworkload->file_path) }}"
+                                                                    width="100" height="120">
+                                                            </a>
+                                                        @else
+                                                            <a class=""
+                                                                href="{{ url('storage/' . $list_subworkload->file_path) }}"
+                                                                target="_blank">
+                                                                <i class='bx bxs-file text-primary'></i>
+                                                            </a>
+                                                        @endif
                                                     @endif
+
 
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child == 0)
-                                                        <input type="number" name="scores[{{ $list_subworkload->id }}]"
+                                                        <input type="number"
+                                                            name="scores[{{ $list_subworkload->id }}]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
                                                             min="0"
                                                             class="form-control text-center bg-white border-0" disabled>

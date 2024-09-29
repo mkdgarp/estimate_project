@@ -56,31 +56,34 @@
                                             <tr attr-id="{{ $list_subworkload->id }}">
 
                                                 <td>
-                                                    {{-- {{$list_subworkload->sort_order}} --}}
-                                                    @if ($list_subworkload->sort_order != 0 && $list_subworkload->sort_order != 10)
-                                                        <p class="ps-4 pb-0 mb-0">
-                                                            -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
-                                                    @else
-                                                        {{ $list_subworkload->name }}
-                                                    @endif
+
                                                     @if ($list_subworkload->is_child == 1)
+                                                        {{ $list_subworkload->name }}
                                                         <br>
                                                         <div class="m-3"><button
                                                                 class="btn btn-success add-new-subject mb-2"
                                                                 sort_order="{{ $list_subworkload->sort_order }}"
-                                                                subworkload_id="{{ $list_subworkload->id }}">+
+                                                                subworkload_id="{{ $list_subworkload->subworkload_id }}"
+                                                                list_id="{{ $list_subworkload->id }}">+
                                                                 เพิ่มวิชา</button>
                                                         </div>
+                                                    @else
+                                                        <div class="w-100 d-flex">
+                                                            <button
+                                                                class="btn btn-outline-danger border-0 remove-subjects py-1 px-2"
+                                                                type="button" by-id="{{ $list_subworkload->id }}"
+                                                                user-id="{{ auth()->id() }}"><i
+                                                                    class='bx bxs-trash'></i></button>
+                                                            <p class="ps-4 pb-0 mb-0">
+                                                                -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
+
+                                                        </div>
                                                     @endif
-                                                    <div class="m-3"><button
-                                                        class="btn btn-success add-new-subject mb-2"
-                                                        sort_order="{{ $list_subworkload->sort_order }}"
-                                                        subworkload_id="{{ $list_subworkload->id }}">+
-                                                        เพิ่มวิชา</button>
-                                                </div>
+
+
                                                 </td>
                                                 <td style="width:190px;" class="text-center">
-                                                    @if ($list_subworkload->id != 1)
+                                                    @if ($list_subworkload->is_child != 1)
                                                         @if ($list_subworkload->file_path == '')
                                                             <input class="form-control form-control-sm formFileSm"
                                                                 name="files[{{ $list_subworkload->id }}]"
@@ -98,10 +101,10 @@
                                                         @else
                                                             <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
                                                                 target="_blank">
-                                                                <embed type="image/jpg"
+                                                                <embed
                                                                     src="{{ url('storage/' . $list_subworkload->file_path) }}"
                                                                     class="mx-auto" width="100" height="120">
-                                                            </a><button class="btn btn-outline-danger remove-image"
+                                                            </a><button class="btn btn-outline-danger remove-image mt-2"
                                                                 type="button"
                                                                 image-by-id="{{ $list_subworkload->id }}"
                                                                 user-id="{{ auth()->id() }}"><i
@@ -114,17 +117,21 @@
 
 
                                                 <td class="text-center">
-                                                    @if ($list_subworkload->id != 1)
+                                                    @if ($list_subworkload->is_child != 1)
                                                         <input type="number"
                                                             name="scores[{{ $list_subworkload->id }}]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
+                                                            min="0" class="form-control text-center">
+                                                    @else
+                                                        <input type="hidden"
+                                                            name="scores[{{ $list_subworkload->id }}]" value="0"
                                                             min="0" class="form-control text-center">
                                                     @endif
 
                                                 </td>
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
-                                                    @if ($list_subworkload->id != 1)
+                                                    @if ($list_subworkload->is_child != 1)
                                                         {{ $list_subworkload->factor }}
                                                     @endif
                                                 </td>
@@ -228,35 +235,50 @@
             });
 
 
-
-            $('.add-new-subject').on('click', function(e) {
-                let parentId = 1
+            let parentIdFirst = 1
+            // $('.add-new-subject').on('click', function(e) {
+            $(document).on('click', '.add-new-subject', function(e) {
                 let sort_order = $(this).attr('sort_order')
                 let subworkload_id = $(this).attr('subworkload_id')
+                let list_id = $(this).attr('list_id')
                 e.preventDefault();
-                parentId++
+                console.log(parentIdFirst)
+                parentIdFirst++
                 var newRow = `
         <div class="row-per-subject">
             <div class="row">
-                <div class="col-4">
-                    <select class="form-select factor-select" name="subjects[${parentId}][factor]" required>
-                        <option value="0" selected data-factor="0.00">เลือกจำนวนนักศึกษา</option>
-                        <option value="2.00,นักศึกษาน้อยกว่า ๓๐ คน">๑. นักศึกษาน้อยกว่า ๓๐ คน</option>
-                        <option value="3.00,นักศึกษา ๓๐ - ๖๐ คน">๒. นักศึกษา ๓๐ - ๖๐ คน</option>
-                        <option value="4.00,นักศึกษามากกว่า ๖๐ คน">๓. นักศึกษามากกว่า ๖๐ คน</option>
-                    </select>
+                <div class="col-5">
+                    <label class="form-label">ชื่อภาระงาน</label>
+                    <input type="text" class="form-control subject-name" name="subjects[${parentIdFirst}][name]" placeholder="ชื่อภาระงาน" required>
                 </div>
-                <div class="col-4">
-                    <input type="text" class="form-control subject-name" name="subjects[${parentId}][name]" placeholder="ชื่อวิชา" required>
+                <div class="col-2">
+                    <label class="form-label">จำนวน</label>
+                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][score]" min="0" placeholder="จำนวน" required>
                 </div>
-                <div class="col-3">
-                    <input type="number" class="form-control subject-score" name="subjects[${parentId}][score]" min="0" placeholder="คะแนน" required>
-                    <input type="text" class="form-control subject-score" name="subjects[${parentId}][sort_order]" value="${sort_order}">
-                    <input type="text" class="form-control subject-score" name="subjects[${parentId}][subworkload_id]" value="${subworkload_id}">
+                <div class="col-2">
+                    <label class="form-label">ภาระงาน</label>
+                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][factor]" min="0" placeholder="ภาระงาน" required>
+                    <input type="hidden" class="form-control sort_order" name="subjects[${parentIdFirst}][sort_order]" value="${sort_order}">
+                    <input type="hidden" class="form-control subworkload_id" name="subjects[${parentIdFirst}][subworkload_id]" value="${subworkload_id}">
+                    <input type="hidden" class="form-control list_id" name="subjects[${parentIdFirst}][list_id]" value="${list_id}">
                 </div>
-                <div class="col-1"><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
+                <div class="col-2">
+<label class="form-label">&nbsp;</label>
+
+<input class="form-control form-control-sm formFileSm"
+                                name="subjects[${parentIdFirst}][files]" type="file" style="display:none;"
+                                id="file-${parentIdFirst}" onchange="updateFileName(this)">
+                            <label for="file-${parentIdFirst}" class="rounded border px-2 py-1"
+                                style="cursor:pointer;">
+                                <i class='bx bx-link'></i> เลือกไฟล์
+                            </label>
+                            <span id="file-name-${parentIdFirst}" class="file-name-display"
+                                style="margin-left: 10px;"></span>
+
+                </div>
+                <div class="col-1"><label class="form-label">&nbsp;</label><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
             </div>
-            <hr>
+            <br>
         </div>
     `;
                 $(this).closest('.m-3').append(newRow);
@@ -277,6 +299,23 @@
                     })
                     .then(function(response) {
                         alert('ไฟล์ถูกลบเรียบร้อยแล้ว');
+                        location.reload(); // อัปเดตหน้าใหม่
+                    })
+                    .catch(function(error) {
+                        alert('เกิดข้อผิดพลาด: ' + error.response.data);
+                    });
+            });
+
+            $('.remove-subjects').on('click', function() {
+                const list_id = $(this).attr('by-id');
+                const userid = $(this).attr('user-id');
+                axios.delete(`/remove-subjects/${list_id}/${userid}`, {
+                        data: {
+                            id: list_id
+                        } // สำหรับ Axios, ข้อมูลจะถูกส่งใน `data` ของการเรียก DELETE
+                    })
+                    .then(function(response) {
+                        alert('ลบภาระงานเรียบร้อยแล้ว');
                         location.reload(); // อัปเดตหน้าใหม่
                     })
                     .catch(function(error) {

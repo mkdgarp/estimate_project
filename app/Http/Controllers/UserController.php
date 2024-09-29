@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Models\ListSubworkload;
 
 class UserController extends Controller
 {
@@ -76,6 +77,22 @@ class UserController extends Controller
             $score->save();
 
             return response()->json(['message' => 'ลบไฟล์สำเร็จ'], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'ไม่พบเรคคอร์ดที่ต้องการ'], 404);
+        }
+    }
+
+    public function destroy_subjects($id, $userId)
+    {
+        try {
+            // ค้นหา score ที่มี id ตรงกัน
+            $score = Score::where('subworkload_id', $id)->where('user_id', $userId)->first();
+            $list_subject = ListSubworkload::where('id', $id)->where('create_by', $userId)->first();
+            // ตั้งค่า file_path เป็น NULL
+            $score->delete();
+            $list_subject->delete();
+            
+            return response()->json(['message' => 'ลบภาระงานสำเร็จ'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'ไม่พบเรคคอร์ดที่ต้องการ'], 404);
         }
