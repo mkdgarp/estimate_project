@@ -369,6 +369,7 @@
                         `/move-subject/${move_subworkloadId}/${move_userid}/${modal_move_professor_2}`
                     ) //ID ที่โยก , เจ้าของภาระงาน , ID User ปลายทางที่รับภาระงาน
                     .then(function(response) {
+                        alert('โยกย้ายภาระงานสำเร็จ!')
                         location.reload(); // อัปเดตหน้าใหม่
                     })
                     .catch(function(error) {
