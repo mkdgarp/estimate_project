@@ -3,4 +3,4 @@
 </svg> --}}
 
 
-<img src="../MAIN-LOGO.jfif" alt="" width="36" height="36">
+<img src="{{url('MAIN-LOGO.jfif')}}" alt="" width="36" height="36">
