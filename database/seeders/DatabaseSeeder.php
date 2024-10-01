@@ -2620,7 +2620,7 @@ class DatabaseSeeder extends Seeder
             //ข้อ 7
             [
                 'id' => 170,
-                'name' => '๒. รายการภาระงาน',
+                'name' => '๑. รายการภาระงาน',
                 'description' => NULL,
                 'subworkload_id' => 23,
                 'factor' => 1,
