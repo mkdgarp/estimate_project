@@ -391,6 +391,22 @@
                                     <td class="text-center">{{ $total_5 }}</td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <b><u>๖. ภาระงานด้านบริหารทดแทนภาระงาน</u></b>
+
+                                    </td>
+                                    <td class="text-center">{{ $total_6 }}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b><u>๗. ภาระงานที่ได้รับการแต่งตั้งให้ดำรงตำแหน่งและงานที่ได้รับมอบหมายอื่น ๆ</u></b>
+
+                                    </td>
+                                    <td class="text-center">{{ $total_7 }}</td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                             <tfoot>
                                 <tr>
