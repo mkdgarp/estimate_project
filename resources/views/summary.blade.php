@@ -189,7 +189,7 @@
                                                 <td class="text-center factor-display"
                                                     id="factor-display-{{ $list_subworkload->id }}">
                                                     @if ($list_subworkload->is_child == 0)
-                                                        {{ number_format($list_subworkload->factor * $list_subworkload->score, 2) }}
+                                                        {{ number_format($list_subworkload->factor * $list_subworkload->score, 3) }}
                                                     @endif
                                                 </td>
                                                 <td></td>

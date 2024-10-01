@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('list_subworkloads', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->text('name');
             $table->string('description')->nullable();
             $table->unsignedBigInteger('subworkload_id');
-            $table->decimal('factor')->default(1);
+            $table->decimal('factor',8,3)->default(1.000);
             $table->string('create_by')->default('SYSTEM');
             $table->integer('sort_order')->default(0);
             $table->integer('is_child')->default(0);

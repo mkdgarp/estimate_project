@@ -154,7 +154,7 @@ class SubworkloadController extends Controller
         $request->validate([
             'scores.*' => 'required|numeric',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048',
-            'subjects.*.name' => 'required|string|max:255',  // Validate subject names
+            'subjects.*.name' => 'required|string',  // Validate subject names
         ]);
 
         // Process subjects and their respective files
@@ -287,10 +287,17 @@ class SubworkloadController extends Controller
 
             // Redirect based on user_id
             if ($request->input('user_id')) {
-                return redirect()->route('summary-by-id', [
-                    'userId' => $request->input('user_id'),
-                    'workloadId' => $workloadId,
-                ])->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
+                if ($request->input('is_staff')) {
+                    return redirect()->route('staff-manage-subworkload-list-by-id', [
+                        'userId' => $request->input('user_id'),
+                        'workloadId' => $workloadId,
+                    ])->with('success', 'อัพเดตข้อมูลสำเร็จ!');
+                } else {
+                    return redirect()->route('summary-by-id', [
+                        'userId' => $request->input('user_id'),
+                        'workloadId' => $workloadId,
+                    ])->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
+                }
             } else {
                 return redirect()->route('workloads.summary', $workloadId)
                     ->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');

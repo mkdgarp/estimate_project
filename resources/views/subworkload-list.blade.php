@@ -65,7 +65,7 @@
                                                                 sort_order="{{ $list_subworkload->sort_order }}"
                                                                 subworkload_id="{{ $list_subworkload->subworkload_id }}"
                                                                 list_id="{{ $list_subworkload->id }}">+
-                                                                เพิ่มวิชา</button>
+                                                                เพิ่มภาระงาน</button>
                                                         </div>
                                                     @else
                                                         <div class="w-100 d-flex">
@@ -253,11 +253,11 @@
                 </div>
                 <div class="col-2">
                     <label class="form-label">จำนวน</label>
-                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][score]" min="0" placeholder="จำนวน" required>
+                    <input type="text" class="form-control subject-score" name="subjects[${parentIdFirst}][score]" min="0" placeholder="จำนวน" required>
                 </div>
                 <div class="col-2">
                     <label class="form-label">ภาระงาน</label>
-                    <input type="number" class="form-control subject-score" name="subjects[${parentIdFirst}][factor]" min="0" placeholder="ภาระงาน" required>
+                    <input type="text" class="form-control subject-score" name="subjects[${parentIdFirst}][factor]" min="0" placeholder="ภาระงาน" required>
                     <input type="hidden" class="form-control sort_order" name="subjects[${parentIdFirst}][sort_order]" value="${sort_order}">
                     <input type="hidden" class="form-control subworkload_id" name="subjects[${parentIdFirst}][subworkload_id]" value="${subworkload_id}">
                     <input type="hidden" class="form-control list_id" name="subjects[${parentIdFirst}][list_id]" value="${list_id}">

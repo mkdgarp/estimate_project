@@ -23,6 +23,7 @@
                         @csrf
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                         <input type="hidden" name="workload_id" value="{{ $workload->id }}">
+                        <input type="hidden" name="is_staff" value="1">
 
 
 
@@ -36,7 +37,7 @@
                             {{-- <div class="accordion-item mb-3"> --}}
                             <div class="bg-primary-subtle p-3 rounded-left rounded-right w-100 d-flex">
                                 <div>{{ $subworkload['subworkload']->name }}</div>
-                                <div class="text-end ms-auto">
+                                {{-- <div class="text-end ms-auto">
                                     <button class="btn btn-primary modal-move-subjects" type="button"
                                         data-bs-toggle="modal" data-bs-target="#exampleModal"
                                         subworkload_id="{{ $subworkload['subworkload']->id }}"
@@ -45,7 +46,7 @@
                                         <i class='bx bx-transfer-alt'></i>
                                         &nbsp;โยกย้ายภาระงาน
                                     </button>
-                                </div>
+                                </div> --}}
                             </div>
 
                             {{-- <div id="panelsStayOpen-{{ $index }}"
@@ -70,20 +71,20 @@
                                                     @if ($list_subworkload->is_child == 1)
                                                         {{ $list_subworkload->name }}
                                                         <br>
-                                                        <div class="m-3"><button
+                                                        {{-- <div class="m-3"><button
                                                                 class="btn btn-success add-new-subject mb-2"
                                                                 sort_order="{{ $list_subworkload->sort_order }}"
                                                                 subworkload_id="{{ $list_subworkload->subworkload_id }}"
                                                                 list_id="{{ $list_subworkload->id }}">+
                                                                 เพิ่มภาระงาน</button>
-                                                        </div>
+                                                        </div> --}}
                                                     @else
                                                         <div class="w-100 d-flex">
-                                                            <button
+                                                            {{-- <button
                                                                 class="btn btn-outline-danger border-0 remove-subjects py-1 px-2"
                                                                 type="button" by-id="{{ $list_subworkload->id }}"
                                                                 user-id="{{ $user->id }}"><i
-                                                                    class='bx bxs-trash'></i></button>
+                                                                    class='bx bxs-trash'></i></button> --}}
                                                             <p class="ps-4 pb-0 mb-0">
                                                                 -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
 
@@ -125,10 +126,11 @@
 
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child != 1)
-                                                        <input type="number"
+                                                        <input type="hidden"
                                                             name="scores[{{ $list_subworkload->id }}]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
                                                             min="0" class="form-control text-center">
+                                                        {{ number_format($list_subworkload->score, 0) }}
                                                     @else
                                                         <input type="hidden"
                                                             name="scores[{{ $list_subworkload->id }}]" value="0"

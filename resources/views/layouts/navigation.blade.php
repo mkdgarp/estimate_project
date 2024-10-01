@@ -51,6 +51,15 @@
                         </x-nav-link>
                     </div>
                 @endif
+
+                @if (
+                    (Auth::user()->role == 'user' && Auth::user()->rank == '1'))
+                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                        <x-nav-link :href="route('workloads.view-report')" :active="request()->routeIs('workloads.view-report')">
+                            {{ __('แก้ไขไฟล์ภาระงาน') }}
+                        </x-nav-link>
+                    </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

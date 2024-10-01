@@ -92,7 +92,9 @@ class DatabaseSeeder extends Seeder
             'ภาระงานวิจัยและงานวิชาการอื่นที่ปรากฏเป็นผลงานวิชาการตามหลักเกณฑ์ที่ ก.พ.อ กำหนด',
             'ภาระงานบริการทางวิชาการ',
             'ภาระงานทำนุบำรุงศิลปวัฒนธรรม',
-            'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะและมหาวิทยาลัย'
+            'ภาระงานอื่นๆ ที่สอดคล้องกับพันธกิจของคณะและมหาวิทยาลัย',
+            'บุคลากรสายวิชาการที่ดำรงตำแหน่งผู้บริหาร ',
+            'บุคลากรสายวิชาการที่ได้รับการแต่งตั้งให้ดำรงตำแหน่งและงานที่ได้รับมอบหมายอื่น ๆ ',
         ];
 
         foreach ($workloads as $workload) {
@@ -122,6 +124,8 @@ class DatabaseSeeder extends Seeder
             ['id' => 19, 'name' => '๔.๑ เกณฑ์การคิดภารศึกษางานการจัดโครงการทำนุบำนุบำรุงศิลปะ วัฒนธรรม', 'description' => NULL, 'workload_id' => 4, 'created_at' => now(), 'updated_at' => now()],
             ['id' => 20, 'name' => '๔.๒ เกณฑ์การคิดภาระงานการเข้าร่วมโครงการทำนุบำรุงศิลปะวัฒนะวัฒนธรรม', 'description' => NULL, 'workload_id' => 4, 'created_at' => now(), 'updated_at' => now()],
             ['id' => 21, 'name' => '๕.๑ เกณฑ์การคิดภาระงานในลักษณะกิจกรรมที่เกี่ยวกับการเรียนการสอน งานบริการ วิชาการ/กิจกรรมนักศึกษา', 'description' => NULL, 'workload_id' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 22, 'name' => '๖.๑ ภาระงานด้านบริหารทดแทนภาระงาน', 'description' => NULL, 'workload_id' => 6, 'created_at' => now(), 'updated_at' => now()],
+            ['id' => 23, 'name' => '๗.๑ ภาระงานที่ได้รับการแต่งตั้งให้ดำรงตำแหน่งและงานที่ได้รับมอบหมายอื่น ๆ', 'description' => NULL, 'workload_id' => 7, 'created_at' => now(), 'updated_at' => now()],
         ]);
 
         // Seed list_subworkloads
@@ -2587,6 +2591,41 @@ class DatabaseSeeder extends Seeder
                 'factor' => 1,
                 'create_by' => 'SYSTEM',
                 'sort_order' => 89,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'is_child' => 1,
+                'is_unique' => 0,
+                'is_leader' => 0,
+                'is_country' => 0,
+                'list_subworkloads_child_id' => NULL
+            ],
+
+            //ข้อ 6
+            [
+                'id' => 169,
+                'name' => '๑. รายการภาระงาน',
+                'description' => NULL,
+                'subworkload_id' => 22,
+                'factor' => 1,
+                'create_by' => 'SYSTEM',
+                'sort_order' => 99,
+                'created_at' => now(),
+                'updated_at' => now(),
+                'is_child' => 1,
+                'is_unique' => 0,
+                'is_leader' => 0,
+                'is_country' => 0,
+                'list_subworkloads_child_id' => NULL
+            ],
+            //ข้อ 7
+            [
+                'id' => 170,
+                'name' => '๒. รายการภาระงาน',
+                'description' => NULL,
+                'subworkload_id' => 23,
+                'factor' => 1,
+                'create_by' => 'SYSTEM',
+                'sort_order' => 99,
                 'created_at' => now(),
                 'updated_at' => now(),
                 'is_child' => 1,
