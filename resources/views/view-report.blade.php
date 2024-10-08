@@ -47,11 +47,13 @@
                     <div class="text-end">
                         <div class="autoComplete_wrapper text-end">
                             @if (Auth::user()->rank != '1')
-                                <input class="trigger-autocomplete" id="autoComplete_not_staff" type="search" dir="ltr"
-                                    spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
+                                <input class="trigger-autocomplete" id="autoComplete_not_staff" type="search"
+                                    dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+                                    autocapitalize="off">
                             @else
-                                <input class="trigger-autocomplete" id="autoComplete_staff" type="search" dir="ltr"
-                                    spellcheck=false autocorrect="off" autocomplete="off" autocapitalize="off">
+                                <input class="trigger-autocomplete" id="autoComplete_staff" type="search"
+                                    dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+                                    autocapitalize="off">
                             @endif
                         </div>
                     </div>
@@ -72,7 +74,6 @@
                                         </td>
                                     </tr>
                                     @foreach ($workloads as $workload)
-                                       
                                         <tr class="tr-main tr-show-{{ $users->id }}">
                                             <td>{{ $workload->id }}</td>
                                             <td>{{ $workload->name }}</td>
@@ -88,7 +89,10 @@
                                     @endforeach
                                     <tr class="tr-main tr-show-{{ $users->id }}">
                                         <td colspan="3" class="text-end fw-bold">รวมคะแนน</td>
-                                        <td class="fw-bold text-end">{{$arrTotalScore[$users->id]}}</td>
+                                        <td class="fw-bold text-end">
+                                            {{ isset($arrTotalScore[$users->id]) && $arrTotalScore[$users->id] != 0 ? $arrTotalScore[$users->id] : '0' }}
+                                        </td>
+
                                     </tr>
                                 @endforeach
 
@@ -119,7 +123,10 @@
                                     @endforeach
                                     <tr class="tr-main tr-show-{{ $users->id }}">
                                         <td colspan="3" class="text-end fw-bold">รวมคะแนน</td>
-                                        <td class="fw-bold text-end">{{$arrTotalScore[$users->id]}}</td>
+                                        <td class="fw-bold text-end">
+                                            {{ isset($arrTotalScore[$users->id]) && $arrTotalScore[$users->id] != 0 ? $arrTotalScore[$users->id] : '0' }}
+                                        </td>
+
                                     </tr>
                                 @endforeach
 

@@ -11,6 +11,7 @@
             @page {
                 size: A4;
                 margin: 20mm;
+                font-size: 10px;
             }
 
             /* Style the printable content */

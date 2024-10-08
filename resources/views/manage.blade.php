@@ -64,17 +64,24 @@
                                             @endif
                                         </td>
                                         <td>
-                                            {{-- <div>
-                                                <button class="btn btn-outline-warning">แก้ไข</button>
-                                            </div> --}}
-                                            <div>
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                    onsubmit="return confirm('คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                                    <button class="btn btn-outline-danger" type="submit">ลบ</button>
-                                                </form>
+                                            <div class="d-flex">
+                                                <div class="me-1">
+                                                    <a href="../../users/{{ $user->id }}/edit">
+                                                        <button class="btn btn-outline-warning">แก้ไข</button>
+                                                    </a>
+                                                </div>
+                                                <div>
+                                                    <form action="{{ route('users.destroy', $user->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <input type="hidden" name="user_id"
+                                                            value="{{ $user->id }}">
+                                                        <button class="btn btn-outline-danger"
+                                                            type="submit">ลบ</button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </td>
 

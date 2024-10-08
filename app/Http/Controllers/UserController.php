@@ -50,6 +50,51 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'เพิ่มผู้ใช้งานสำเร็จ!');
     }
 
+    public function edit($id)
+    {
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Return the edit view with the user data
+        return view('edit-user', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $id,
+            'password' => 'nullable|string|min:6',
+            'role' => 'required|string',
+            'rank' => 'required|integer',
+            'professor_group' => 'required',
+        ]);
+
+        // Find the user by ID
+        $user = User::findOrFail($id);
+
+        // Update user data
+        $user->name = $validatedData['name'];
+        $user->email = $validatedData['email'];
+
+        // Update password only if provided
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validatedData['password']);
+        }
+
+        $user->role = $validatedData['role'];
+        $user->rank = $validatedData['rank'];
+        $user->professor_group = $validatedData['professor_group'];
+
+        // Save the updated user data
+        $user->save();
+
+        // Redirect back with success message
+        return redirect()->route('manage')->with('success', 'อัปเดตผู้ใช้งานสำเร็จ!');
+    }
+
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);

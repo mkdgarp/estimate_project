@@ -41,6 +41,8 @@ Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updat
 Route::get('/search-users', [UserController::class, 'searchUsers']);
 Route::get('/fetch-user-workloads/{userId}', [UserController::class, 'fetchUserWorkloads']);
 
+Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('edit-user');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 
 Route::get('/users/create', [UserController::class, 'create'])
     ->middleware(['auth', 'verified'])
