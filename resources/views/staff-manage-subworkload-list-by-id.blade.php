@@ -93,31 +93,103 @@
                                                 </td>
                                                 <td style="width:190px;" class="text-center">
                                                     @if ($list_subworkload->is_child != 1)
+                                                        {{-- {{ $list_subworkload->file_path }} --}}
+                                                        @php
+                                                            $filePaths = json_decode($list_subworkload->file_path);
+                                                            if (is_array($filePaths)) {
+                                                                // echo count($filePaths);
+                                                            } else {
+                                                                // echo 0;
+                                                            }
+                                                        @endphp
+
+
                                                         @if ($list_subworkload->file_path == '')
-                                                            <input class="form-control form-control-sm formFileSm"
-                                                                name="files[{{ $list_subworkload->id }}]"
-                                                                type="file" style="display:none;"
-                                                                id="file-{{ $list_subworkload->id }}"
-                                                                onchange="updateFileName(this)">
-                                                            <label for="file-{{ $list_subworkload->id }}"
-                                                                class="rounded border px-2 py-1"
-                                                                style="cursor:pointer;">
-                                                                <i class='bx bx-link'></i> เลือกไฟล์
-                                                            </label>
-                                                            <span id="file-name-{{ $list_subworkload->id }}"
-                                                                class="file-name-display"
-                                                                style="margin-left: 10px;"></span>
+                                                            @for ($x = 0; $x <= 4; $x++)
+                                                                {{-- {{ count($filePaths[$x]) }} --}}
+                                                                <div>
+                                                                    <input type="hidden"
+                                                                        name="main[{{ $list_subworkload->id }}][list_subworkload_id]"
+                                                                        value="{{ $list_subworkload->id }}">
+                                                                    <input
+                                                                        class="form-control form-control-sm formFileSm"
+                                                                        name="main[{{ $list_subworkload->id }}][files][]"
+                                                                        type="file" multiple style="display:none;"
+                                                                        id="file-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                        onchange="updateFileName(this, {{ $list_subworkload->id }}, {{ $x }})">
+
+                                                                    <label
+                                                                        for="file-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                        class="rounded border px-2 py-1"
+                                                                        style="cursor:pointer;">
+                                                                        <i class='bx bx-link'></i> เลือกไฟล์
+                                                                    </label>
+                                                                    <span
+                                                                        id="file-name-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                        class="file-name-display"
+                                                                        style="margin-left: 10px;"></span>
+                                                                </div>
+                                                            @endfor
                                                         @else
-                                                            <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                                target="_blank">
-                                                                <embed
-                                                                    src="{{ url('storage/' . $list_subworkload->file_path) }}"
-                                                                    class="mx-auto" width="100" height="120">
-                                                            </a><button class="btn btn-outline-danger remove-image mt-2"
-                                                                type="button"
-                                                                image-by-id="{{ $list_subworkload->id }}"
-                                                                user-id="{{ $user->id }}"><i
-                                                                    class='bx bxs-trash'></i> ลบไฟล์</button>
+                                                            @if (!empty($list_subworkload->file_path))
+                                                                @php
+                                                                    $filePaths = json_decode(
+                                                                        $list_subworkload->file_path,
+                                                                    );
+                                                                @endphp
+
+
+
+                                                                @foreach ($filePaths as $index => $file_path)
+                                                                    <a href="{{ url('storage/' . $file_path) }}"
+                                                                        target="_blank">
+                                                                        <embed src="{{ url('storage/' . $file_path) }}"
+                                                                            class="mx-auto" width="100"
+                                                                            height="120">
+                                                                    </a>
+                                                                    <button
+                                                                        class="btn btn-outline-danger remove-image mt-2"
+                                                                        type="button"
+                                                                        image-by-id="{{ $list_subworkload->id }}"
+                                                                        index-by-image="{{ $index }}"
+                                                                        user-id="{{ auth()->id() }}">
+                                                                        <i class='bx bxs-trash'></i> ลบไฟล์
+                                                                    </button>
+                                                                @endforeach
+
+                                                                @if (is_array($filePaths))
+                                                                    @for ($x = 0; $x <= 4 - count($filePaths); $x++)
+                                                                        <div>
+                                                                            <input type="hidden"
+                                                                                name="main[{{ $list_subworkload->id }}][list_subworkload_id]"
+                                                                                value="{{ $list_subworkload->id }}">
+                                                                            <input
+                                                                                class="form-control form-control-sm formFileSm"
+                                                                                name="main[{{ $list_subworkload->id }}][files][]"
+                                                                                type="file" multiple
+                                                                                style="display:none;"
+                                                                                id="file-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                                onchange="updateFileName(this, {{ $list_subworkload->id }}, {{ $x }})">
+
+                                                                            <label
+                                                                                for="file-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                                class="rounded border px-2 py-1"
+                                                                                style="cursor:pointer;">
+                                                                                <i class='bx bx-link'></i> เลือกไฟล์
+                                                                            </label>
+                                                                            <span
+                                                                                id="file-name-{{ $list_subworkload->id }}-{{ $x }}"
+                                                                                class="file-name-display"
+                                                                                style="margin-left: 10px;"></span>
+                                                                        </div>
+                                                                    @endfor
+                                                                @else
+                                                                    <p>Unable to decode file paths. Please check the
+                                                                        format.</p>
+                                                                @endif
+                                                            @else
+                                                                <p>No files found.</p>
+                                                            @endif
                                                         @endif
                                                     @endif
 
@@ -222,65 +294,46 @@
         });
 
         // Ensure to attach this to the form's submit event
-        function updateFileName(input) {
+        function updateFileName(input, id_num, inputIndex) {
             const fileInput = input; // รับ input ที่ถูกเปลี่ยน
             const maxSize = 2 * 1024 * 1024; // 2MB in bytes
-
+            const fileNameDisplay = $('#file-name-' + id_num + '-' + inputIndex);
+            console.log(id_num, inputIndex)
             // ตรวจสอบว่า fileInput มีไฟล์หรือไม่
             if (fileInput.files.length > 0) {
-                const file = fileInput.files[0]; // รับไฟล์แรก
-                if (file.size > maxSize) {
-                    alert('File size must be less than 2MB.');
+                let validFiles = [];
+                let fileNames = [];
 
-                    // ล้างค่า input file
-                    $(fileInput).val(''); // jQuery ล้างค่า input
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    const file = fileInput.files[i];
 
-                    // ล้างชื่อไฟล์ที่แสดง
-                    const fileNameDisplay = $(fileInput).next('.file-name-display');
-                    fileNameDisplay.text(''); // ล้างชื่อไฟล์
+                    if (file.size > maxSize) {
+                        alert(`File "${file.name}" size must be less than 2MB.`);
+                        $(fileInput).val(''); // Clear input
+                        fileNames = [];
+                        break;
+                    }
 
-                    return false; // ห้ามส่งฟอร์ม
+                    validFiles.push(file);
+                    fileNames.push(file.name);
                 }
 
                 // แสดงชื่อไฟล์
-                const fileNameDisplay = $('#file-name-' + fileInput.id.split('-')[1]);
-                fileNameDisplay.text(file.name); // แสดงชื่อไฟล์
+                fileNameDisplay.text(fileNames.join(', ')); // แสดงชื่อไฟล์
             } else {
                 // หากไม่มีไฟล์ ให้ล้างชื่อไฟล์ที่แสดง
-                const fileNameDisplay = $('#file-name-' + fileInput.id.split('-')[1]);
                 fileNameDisplay.text('');
             }
 
             return true; // อนุญาตให้ส่งฟอร์ม
         }
 
+
         $(document).ready(function() {
-            $('.formFileSm').on('change', function(event) {
-                const fileInput = $(this)[0]; // Ensure you're selecting the correct input
-                const maxSize = 2 * 1024 * 1024; // 2MB in bytes
 
-                // Check if the fileInput exists
-                if (!fileInput) {
-                    console.error("File input not found!");
-                    return true; // Allow submission if input is not found (optional behavior)
-                }
 
-                if (fileInput.files.length > 0) {
-                    const file = fileInput.files[0]; // Get the first file
-                    if (file.size > maxSize) {
-                        alert('File size must be less than 2MB.');
-
-                        // Clear the file input
-                        $(this).val(''); // jQuery to reset the input
-
-                        return false; // Prevent form submission
-                    }
-                }
-
-                return true; // Allow form submission
-            });
-
-            var parentIdFirst = 1
+            let parentIdFirst = 1
+            // $('.add-new-subject').on('click', function(e) {
             $(document).on('click', '.add-new-subject', function(e) {
                 let sort_order = $(this).attr('sort_order')
                 let subworkload_id = $(this).attr('subworkload_id')
@@ -309,17 +362,53 @@
                 <div class="col-2">
 <label class="form-label">&nbsp;</label>
 
-<input class="form-control form-control-sm formFileSm"
-                                name="subjects[${parentIdFirst}][files]" type="file" style="display:none;"
-                                id="file-${parentIdFirst}" onchange="updateFileName(this)">
-                            <label for="file-${parentIdFirst}" class="rounded border px-2 py-1"
-                                style="cursor:pointer;">
-                                <i class='bx bx-link'></i> เลือกไฟล์
-                            </label>
-                            <span id="file-name-${parentIdFirst}" class="file-name-display"
-                                style="margin-left: 10px;"></span>
+<div>
+    <input class="form-control form-control-sm formFileSm"
+           name="subjects[${parentIdFirst}][files][]" type="file" multiple style="display:none;"
+           id="file-${parentIdFirst}-1" onchange="updateFileName(this, ${parentIdFirst}, 1)">
+    <label for="file-${parentIdFirst}-1" class="rounded border px-2 py-1" style="cursor:pointer;">
+        <i class='bx bx-link'></i> เลือกไฟล์
+    </label>
+    <span id="file-name-${parentIdFirst}-1" class="file-name-display" style="margin-left: 10px;"></span>
+</div>
+<div>
+    <input class="form-control form-control-sm formFileSm"
+           name="subjects[${parentIdFirst}][files][]" type="file" multiple style="display:none;"
+           id="file-${parentIdFirst}-2" onchange="updateFileName(this, ${parentIdFirst}, 2)">
+    <label for="file-${parentIdFirst}-2" class="rounded border px-2 py-1" style="cursor:pointer;">
+        <i class='bx bx-link'></i> เลือกไฟล์
+    </label>
+    <span id="file-name-${parentIdFirst}-2" class="file-name-display" style="margin-left: 10px;"></span>
+</div>
+<div>
+    <input class="form-control form-control-sm formFileSm"
+           name="subjects[${parentIdFirst}][files][]" type="file" multiple style="display:none;"
+           id="file-${parentIdFirst}-3" onchange="updateFileName(this, ${parentIdFirst}, 3)">
+    <label for="file-${parentIdFirst}-3" class="rounded border px-2 py-1" style="cursor:pointer;">
+        <i class='bx bx-link'></i> เลือกไฟล์
+    </label>
+    <span id="file-name-${parentIdFirst}-3" class="file-name-display" style="margin-left: 10px;"></span>
+</div>
+<div>
+    <input class="form-control form-control-sm formFileSm"
+           name="subjects[${parentIdFirst}][files][]" type="file" multiple style="display:none;"
+           id="file-${parentIdFirst}-4" onchange="updateFileName(this, ${parentIdFirst}, 4)">
+    <label for="file-${parentIdFirst}-4" class="rounded border px-2 py-1" style="cursor:pointer;">
+        <i class='bx bx-link'></i> เลือกไฟล์
+    </label>
+    <span id="file-name-${parentIdFirst}-4" class="file-name-display" style="margin-left: 10px;"></span>
+</div>
+<div>
+    <input class="form-control form-control-sm formFileSm"
+           name="subjects[${parentIdFirst}][files][]" type="file" multiple style="display:none;"
+           id="file-${parentIdFirst}-5" onchange="updateFileName(this, ${parentIdFirst}, 5)">
+    <label for="file-${parentIdFirst}-5" class="rounded border px-2 py-1" style="cursor:pointer;">
+        <i class='bx bx-link'></i> เลือกไฟล์
+    </label>
+    <span id="file-name-${parentIdFirst}-5" class="file-name-display" style="margin-left: 10px;"></span>
+</div>
 
-                </div>
+            </div>
                 <div class="col-1"><label class="form-label">&nbsp;</label><btn class="btn btn-outline-danger py-1 px-2 removerow"><i class='bx bxs-trash' ></i></btn></div>
             </div>
             <br>
@@ -335,8 +424,9 @@
             $('.remove-image').on('click', function() {
                 const subworkloadId = $(this).attr('image-by-id');
                 const userid = $(this).attr('user-id');
+                const index = $(this).attr('index-by-image');
 
-                axios.delete(`/images/${subworkloadId}/${userid}`, {
+                axios.delete(`/images/${subworkloadId}/${userid}/${index}`, {
                         data: {
                             id: subworkloadId
                         } // สำหรับ Axios, ข้อมูลจะถูกส่งใน `data` ของการเรียก DELETE

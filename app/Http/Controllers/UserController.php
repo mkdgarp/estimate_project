@@ -103,30 +103,39 @@ class UserController extends Controller
         return redirect()->route('manage')->with('success', 'ลบผู้ใช้สำเร็จแล้ว');
     }
 
-    public function destroy_score($id, $userId)
+    public function destroy_score($id, $userId, $index)
     {
         try {
-            // ค้นหา score ที่มี id ตรงกัน
-            $score = Score::where('subworkload_id', $id)->where('user_id', $userId)->first();
+            // สมมติว่าคุณส่ง index และ subworkload_id มาทาง JSON
 
-            // ตรวจสอบว่ามีไฟล์ที่ต้องลบอยู่หรือไม่
-            // if ($score->file_path) {
-            //     // สร้างเส้นทางเต็มของไฟล์ที่ต้องการลบ
-            //     $filePath = public_path('storage/' . $score->file_path);
+            // ค้นหา score ตาม subworkload_id
+            $score = Score::where('subworkload_id', $id)
+                ->where('user_id', $userId)
+                ->firstOrFail();
 
-            //     // เช็คว่ามีไฟล์อยู่จริงหรือไม่ และถ้ามีให้ลบไฟล์
-            //     if (file_exists($filePath)) {
-            //         unlink($filePath); // ลบไฟล์
-            //     }
-            // }
+            // แปลง file_path เป็น array
+            $filePaths = json_decode($score->file_path, true);
 
-            // ตั้งค่า file_path เป็น NULL
-            $score->file_path = NULL;
-            $score->save();
+            // ตรวจสอบว่า index อยู่ในขอบเขต
+            if (isset($filePaths[$index])) {
+                // ลบไฟล์ที่ต้องการตาม index
+                unset($filePaths[$index]);
 
-            return response()->json(['message' => 'ลบไฟล์สำเร็จ'], 200);
+                // รีเซ็ต array ให้มีค่าตามลำดับ
+                $filePaths = array_values($filePaths);
+
+                // แปลงกลับเป็น JSON และบันทึก
+                $score->file_path = json_encode($filePaths);
+                $score->save();
+
+                return response()->json(['message' => 'ลบไฟล์สำเร็จ'], 200);
+            } else {
+                return response()->json(['message' => 'ไม่พบเรคคอร์ดที่ต้องการ'], 404);
+            }
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'ไม่พบเรคคอร์ดที่ต้องการ'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'เกิดข้อผิดพลาด: ' . $e->getMessage()], 500);
         }
     }
 

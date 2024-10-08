@@ -380,6 +380,229 @@ class ForSuperAdminController extends Controller
         return view('print-all-workload', compact('user', 'workload', 'hierarchicalData', 'totalScore', 'total_1', 'total_2', 'total_3', 'total_4', 'total_5', 'total_6', 'total_7', 'total_subjects'));
     }
 
+    public function print_all_workload_superadmin($userId)
+    {
+        $user = User::findOrFail($userId); // ดึงข้อมูลผู้ใช้
+
+
+        // Fetch the workload
+        $workload = Workload::get();
+
+        // Fetch the subworkloads associated with the workload
+        $subworkloads = Subworkload::get();
+        $subworkloads_id = $subworkloads->pluck('id');
+
+
+        $list_subworkloads = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+
+
+        $workload1 = Workload::where('id', 1)->first();
+        $z1 = Subworkload::where('workload_id', $workload1->id)->get();
+        $x1 = $z1->pluck('id');
+        $list_1 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join1) use ($userId) {
+                $join1->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x1)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+
+        $z2 = Subworkload::where('workload_id', 2)->get();
+        $x2 = $z2->pluck('id');
+        $list_2 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x2)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z3 = Subworkload::where('workload_id', 3)->get();
+        $x3 = $z3->pluck('id');
+        $list_3 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x3)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z4 = Subworkload::where('workload_id', 4)->get();
+        $x4 = $z4->pluck('id');
+        $list_4 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x4)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z5 = Subworkload::where('workload_id', 5)->get();
+        $x5 = $z5->pluck('id');
+        $list_5 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x5)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z5 = Subworkload::where('workload_id', 5)->get();
+        $x5 = $z5->pluck('id');
+        $list_5 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x5)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z6 = Subworkload::where('workload_id', 5)->get();
+        $x6 = $z6->pluck('id');
+        $list_6 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x6)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $z7 = Subworkload::where('workload_id', 5)->get();
+        $x7 = $z7->pluck('id');
+        $list_7 = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $x7)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+
+        $zz = Subworkload::all();
+        $xx = $zz->pluck('id');
+        $list_xx = ListSubworkload::select('list_subworkloads.*')
+            ->leftJoin('scores', function ($join) use ($userId) {
+                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
+                    ->where('scores.user_id', $userId);
+            })
+            ->selectRaw('scores.*')
+            ->selectRaw('IFNULL(scores.score, 0) as score')
+            ->selectRaw('scores.file_path')
+            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+
+            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->whereIn('list_subworkloads.subworkload_id', $xx)
+            ->orderBy('list_subworkloads.sort_order', 'desc')
+            ->orderBy('list_subworkloads.id', 'asc')
+            ->get();
+        // Organize hierarchical data
+        $hierarchicalData = [];
+
+        foreach ($subworkloads as $subworkload) {
+            // Prepare the subworkload data
+            $subworkloadArray = [
+                'subworkload' => $subworkload,
+                'list_subworkloads' => $list_subworkloads->filter(function ($list_subworkload) use ($subworkload) {
+                    return $list_subworkload->subworkload_id == $subworkload->id;
+                })
+            ];
+
+            // Add the subworkload data to hierarchicalData
+            $hierarchicalData[] = $subworkloadArray;
+        }
+
+        // Calculate the total score across all subworkloads
+        $totalScore = $list_subworkloads->sum('score');
+        $total_1 = $list_1->sum('finalScore');
+        $total_2 = $list_2->sum('finalScore');
+        $total_3 = $list_3->sum('finalScore');
+        $total_4 = $list_4->sum('finalScore');
+        $total_5 = $list_5->sum('finalScore');
+        $total_6 = $list_6->sum('finalScore');
+        $total_7 = $list_7->sum('finalScore');
+        $total_subjects = $list_xx->sum('finalScore');
+
+        // Return the view with the calculated data
+        return view('print-all-workload-superadmin', compact('user', 'workload', 'hierarchicalData', 'totalScore', 'total_1', 'total_2', 'total_3', 'total_4', 'total_5', 'total_6', 'total_7', 'total_subjects'));
+    }
+
     // public function move_subject($subworkloadId, $own_userid, $final_userid)
     // {
 

@@ -36,6 +36,7 @@ route::get('/manage-subworkload-list-by-id/{userId}/{workloadId}', [ForSuperAdmi
 route::get('/staff-manage-subworkload-list-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'staff'])->name('staff-manage-subworkload-list-by-id');
 route::get('/view-report-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'summary'])->name('summary-by-id');
 route::get('/print-all-workload/{userId}', [ForSuperAdminController::class, 'print_all_workload'])->name('print-all-workload');
+route::get('/print-all-workload-superadmin/{userId}', [ForSuperAdminController::class, 'print_all_workload_superadmin'])->name('print-all-workload-superadmin');
 Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
 // web.php
 Route::get('/search-users', [UserController::class, 'searchUsers']);
@@ -56,7 +57,7 @@ Route::post('/users', [UserController::class, 'store'])->name('users.store');
 Route::put('/move-subject/{subworkloadId}/{own_userid}/{final_userid}', [ForSuperAdminController::class, 'move_subject_inuser'])->name('move_subject.update');
 
 route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-route::delete('/images/{id}/{userId}', [UserController::class, 'destroy_score'])->name('images.destroy');
+route::delete('/images/{id}/{userId}/{index}', [UserController::class, 'destroy_score'])->name('images.destroy');
 route::delete('/remove-subjects/{id}/{userId}', [UserController::class, 'destroy_subjects'])->name('subjects.destroy');
 
 //     Route::get('/', function () {

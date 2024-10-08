@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('subworkload_id');
             $table->decimal('score', 8, 3)->default(0);
             // $table->integer('score')->default(0);
-            $table->string('file_path')->nullable();
+            $table->text('file_path')->nullable();
             $table->integer('ref_child_id')->nullable();
             $table->timestamps();
 

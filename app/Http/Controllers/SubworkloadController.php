@@ -149,15 +149,64 @@ class SubworkloadController extends Controller
         $scores = $request->input('scores');
         $files = $request->file('files'); // Get the files
         $subjects = $request->input('subjects'); // Get the subjects
+        $main = $request->input('main'); // Get the subjects
 
         // Validate the request
         $request->validate([
             'scores.*' => 'required|numeric',
             'files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048',
             'subjects.*.name' => 'required|string',  // Validate subject names
+            'subjects.*.files' => 'array',
+            'subjects.*.files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048', // Validate individual files
+            'main.*.files' => 'array',
+            'main.*.files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048', // Validate individual files
         ]);
-
         // Process subjects and their respective files
+        if ($main) {
+            foreach ($main as $parentId => $subject) {
+                \Log::info('Received subject:', $subject);
+
+                // Check if the subject already exists
+                $existingSubject = ListSubworkload::where('id', $subject['list_subworkload_id'])
+                    ->where('create_by', $userId)
+                    ->first();
+
+                $parentId = $subject['list_subworkload_id'];
+
+                // Initialize file path for subjects
+                $filePathsSubjects = []; // เก็บเส้นทางไฟล์ใน array
+
+                // Handle file upload for subjects
+                if ($request->hasFile("main.$parentId.files")) {
+                    for ($x = 0; $x <= 4; $x++) {
+                        if ($request->hasFile("main.$parentId.files.$x")) {
+                            $file = $request->file("main.$parentId.files.$x");
+                            $filePath = $file->store('public/uploads/' . $userId);
+                            $filePath = str_replace('public/', '', $filePath);
+                            $filePathsSubjects[] = ($filePath) ? $filePath : ""; // เพิ่มเส้นทางไฟล์ใน array
+                        }
+                    }
+                }
+
+                // Update or create the score for the subject
+                $existingScore = Score::where('user_id', $userId)
+                    ->where('subworkload_id', $existingSubject->id)
+                    ->first();
+
+                if ($existingScore) {
+                    // แปลง file_path เก่ากลับมาเป็น array
+                    $oldFilePaths = json_decode($existingScore->file_path, true) ?: [];
+
+                    // รวมไฟล์เก่ากับไฟล์ใหม่
+                    $combinedFilePaths = array_merge($oldFilePaths, $filePathsSubjects);
+                    $existingScore->file_path = json_encode(array_values(array_filter($combinedFilePaths))); // กรองค่าและรีเซ็ต index
+
+                    $existingScore->save();
+                }
+            }
+        }
+
+
         if ($subjects) {
             foreach ($subjects as $parentId => $subject) {
                 \Log::info('Received subject:', $subject);
@@ -171,26 +220,35 @@ class SubworkloadController extends Controller
                         ->first();
 
                     // Create or update the subject
-                    $existingSubject = ListSubworkload::create([
-                        'name' => $subject['name'],
-                        'subworkload_id' => $subject['subworkload_id'],
-                        'factor' => $subject['factor'],
-                        'create_by' => $userId,
-                        'sort_order' => $subject['sort_order'],
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                        'is_child' => 0,
-                    ]);
+                    if (!$existingSubject) {
+                        $existingSubject = ListSubworkload::create([
+                            'name' => $subject['name'],
+                            'subworkload_id' => $subject['subworkload_id'],
+                            'factor' => $subject['factor'],
+                            'create_by' => $userId,
+                            'sort_order' => $subject['sort_order'],
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                            'is_child' => 0,
+                        ]);
+                    }
 
                     // Initialize file path for subjects
-                    $filePathSubjects = null;
+                    $filePathsSubjects = []; // เก็บเส้นทางไฟล์ใน array
 
                     // Handle file upload for subjects
                     if ($request->hasFile("subjects.$parentId.files")) {
-                        $file = $request->file("subjects.$parentId.files");
-                        $filePathSubjects = $file->store('public/uploads/' . $userId);
-                        $filePathSubjects = str_replace('public/', '', $filePathSubjects);
+                        for ($x = 0; $x <= 4; $x++) {
+                            if ($request->hasFile("subjects.$parentId.files.$x")) {
+                                $file = $request->file("subjects.$parentId.files.$x");
+                                $filePath = $file->store('public/uploads/' . $userId);
+                                $filePath = str_replace('public/', '', $filePath);
+                                $filePathsSubjects[] = ($filePath) ? $filePath : ""; // เพิ่มเส้นทางไฟล์ใน array
+                            }
+                        }
                     }
+                    // echo json_encode($filePathsSubjects);
+                    // return;
 
                     // Update or create the score for the subject
                     $existingScore = Score::where('user_id', $userId)
@@ -199,14 +257,14 @@ class SubworkloadController extends Controller
 
                     if ($existingScore) {
                         $existingScore->score = (float) $subject['score'];
-                        $existingScore->file_path = $filePathSubjects ?: $existingScore->file_path;
+                        $existingScore->file_path = !empty($filePathsSubjects) ? json_encode($filePathsSubjects) : $existingScore->file_path; // ถ้ามีไฟล์อัปโหลดก็ใช้
                         $existingScore->save();
                     } else {
                         Score::create([
                             'user_id' => $userId,
                             'subworkload_id' => $existingSubject->id,
                             'score' => (float) $subject['score'],
-                            'file_path' => $filePathSubjects,
+                            'file_path' => !empty($filePathsSubjects) ? json_encode($filePathsSubjects) : null,
                         ]);
                     }
                 } else {
@@ -234,25 +292,25 @@ class SubworkloadController extends Controller
                     ->first();
 
                 // Initialize file path for scores
-                $filePath = null;
+                // $filePath = null;
 
-                // Handle file upload for scores
-                if (isset($files[$subworkloadId]) && $files[$subworkloadId]->isValid()) {
-                    $filePath = $files[$subworkloadId]->store('public/uploads/' . $userId);
-                    $filePath = str_replace('public/', '', $filePath);
-                }
+                // // Handle file upload for scores
+                // if (isset($files[$subworkloadId]) && $files[$subworkloadId]->isValid()) {
+                //     $filePath = $files[$subworkloadId]->store('public/uploads/' . $userId);
+                //     $filePath = str_replace('public/', '', $filePath);
+                // }
 
                 // Update or create the score
                 if ($existingScore) {
                     $existingScore->score = (float) $score;
-                    $existingScore->file_path = $filePath ?: $existingScore->file_path; // Only update if a new file was uploaded
+                    // $existingScore->file_path = $filePath ?: $existingScore->file_path; // Only update if a new file was uploaded
                     $existingScore->save();
                 } else {
                     Score::create([
                         'user_id' => $userId,
                         'subworkload_id' => $subworkloadId,
                         'score' => (float) $score,
-                        'file_path' => $filePath,
+                        // 'file_path' => $filePath,
                     ]);
                 }
 
@@ -272,14 +330,14 @@ class SubworkloadController extends Controller
 
                     if ($existingTotalScore) {
                         $existingTotalScore->score = (float) $score;
-                        $existingTotalScore->file_path = $filePath ?: $existingTotalScore->file_path;
+                        // $existingTotalScore->file_path = $filePath ?: $existingTotalScore->file_path;
                         $existingTotalScore->save();
                     } else {
                         Score::create([
                             'user_id' => $userId,
                             'subworkload_id' => $listSubworkload->id,
                             'score' => (float) $score,
-                            'file_path' => $filePath,
+                            // 'file_path' => $filePath,
                         ]);
                     }
                 }

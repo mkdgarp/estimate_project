@@ -70,7 +70,16 @@
                                     <tr class="tr-main tr-show-{{ $users->id }}">
                                         <td class="bg-secondary-subtle" style="border-right: 0"></td>
                                         <td class="bg-secondary-subtle" style="border-left: 0" colspan="4">
-                                            <h5><b>{{ $users->name }}</b></h5>
+                                            {{-- /print-all-workload-superadmin/{userId} --}}
+                                            <div class="d-flex w-100">
+                                                <div class="me-auto">
+                                                    <h5><b>{{ $users->name }}</b></h5>
+                                                </div>
+                                                <div class="ms-auto"> <a href="../print-all-workload-superadmin/{{ $users->id }}">
+                                                        <button class="btn btn-primary"><i
+                                                                class='bx bxs-printer'></i>&nbsp;พิมพ์เอกสารทั้งหมด</button>
+                                                    </a></div>
+                                            </div>
                                         </td>
                                     </tr>
                                     @foreach ($workloads as $workload)
