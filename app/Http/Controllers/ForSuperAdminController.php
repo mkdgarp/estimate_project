@@ -380,18 +380,32 @@ class ForSuperAdminController extends Controller
         return view('print-all-workload', compact('user', 'workload', 'hierarchicalData', 'totalScore', 'total_1', 'total_2', 'total_3', 'total_4', 'total_5', 'total_6', 'total_7', 'total_subjects'));
     }
 
-    public function move_subject($subworkloadId, $own_userid, $final_userid)
+    // public function move_subject($subworkloadId, $own_userid, $final_userid)
+    // {
+
+    //     $ListSubWorkload = ListSubworkload::where('subworkload_id', $subworkloadId)->where('create_by', $own_userid)->get();
+
+    //     foreach ($ListSubWorkload as $ListSubWorkloads) {
+    //         $oldscore = Score::where('user_id', $own_userid)->where('subworkload_id', $ListSubWorkloads->id)->first();
+    //         $oldscore->user_id = $final_userid;
+    //         $oldscore->save();
+
+    //         $ListSubWorkloads->create_by = $final_userid;
+    //         $ListSubWorkloads->save();
+    //     }
+    // }
+    public function move_subject_inuser($list_subworkload, $own_userid, $to_subworkload)
     {
 
-        $ListSubWorkload = ListSubworkload::where('subworkload_id', $subworkloadId)->where('create_by', $own_userid)->get();
+        $ListSubWorkload = ListSubworkload::where('id', $list_subworkload)->first();
 
-        foreach ($ListSubWorkload as $ListSubWorkloads) {
-            $oldscore = Score::where('user_id', $own_userid)->where('subworkload_id', $ListSubWorkloads->id)->first();
-            $oldscore->user_id = $final_userid;
-            $oldscore->save();
+        // foreach ($ListSubWorkload as $ListSubWorkloads) {
+            // $oldscore = Score::where('user_id', $own_userid)->where('subworkload_id', $ListSubWorkloads->id)->first();
+            // $oldscore->user_id = $final_userid;
+            // $oldscore->save();
 
-            $ListSubWorkloads->create_by = $final_userid;
-            $ListSubWorkloads->save();
-        }
+            $ListSubWorkload->subworkload_id = $to_subworkload;
+            $ListSubWorkload->save();
+        // }
     }
 }

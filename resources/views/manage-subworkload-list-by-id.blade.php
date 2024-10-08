@@ -175,22 +175,51 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="" class="form-label">ภาระงานที่โยกย้าย</label>
+                        <label for="" class="form-label">หัวข้อภาระงานที่โยกย้าย</label>
                         <input type="text" class="form-control modal_subworkload_name" value="" readonly
                             disabled>
                     </div>
                     <div class="mb-3">
-                        <label for="" class="form-label">จากอาจารย์</label>
-                        <input type="text" class="form-control modal_professor_1" value="{{ $user->name }}"
-                            readonly disabled>
+                        <label for="" class="form-label">ภาระงานย่อยที่จะย้าย</label>
+                        {{-- <input type="text" class="form-control modal_professor_1" value="{{ $user->name }}"
+                            readonly disabled> --}}
+                        <select class="form-select modal_professor_1">
+                            <option value="0">เลือก..</option>
+                            @foreach ($hierarchicalData as $index => $subworkload)
+                                @foreach ($subworkload['list_subworkloads'] as $index_list => $list_subworkload)
+                                    @if ($list_subworkload->list_subworkloads_child_id == null)
+                                        @if ($list_subworkload->is_child == 1)
+                                        @else
+                                            {{-- <div class="w-100 d-flex ">
+                                            <input type="checkbox" id="list_subworkload_{{ $list_subworkload->id }}"
+                                                class="select-list-subworkload" value="{{ $list_subworkload->id }}">
+                                            <p for="list_subworkload_{{ $list_subworkload->id }}"
+                                                class="ps-4 pb-0 mb-0 main-show-per-subworkload show-per-subworkload-{{ $list_subworkload->subworkload_id }}">
+                                                -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
+
+                                        </div> --}}
+                                            <option value="{{ $list_subworkload->id }}"
+                                                class="main-show-per-subworkload show-per-subworkload-{{ $list_subworkload->subworkload_id }}">
+                                                {{ $list_subworkload->name }}
+                                            </option>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            @endforeach
+                        </select>
                     </div>
                     <div>
-                        <label for="" class="form-label">ไปยังอาจารย์ <small class="text-muted">(*
-                                กรุณาเลือกอาจารย์)</small></label>
+                        <label for="" class="form-label">ไปยังหัวข้อภาระงาน <small class="text-muted">(*
+                                กรุณาเลือกหัวข้อภาระงาน)</small></label>
                         <select class="form-select modal_professor_2">
                             <option value="0">เลือก..</option>
-                            @foreach ($allUser as $allUsers)
+                            {{-- @foreach ($allUser as $allUsers)
                                 <option value="{{ $allUsers->id }}">{{ $allUsers->name }}</option>
+                            @endforeach --}}
+                            @foreach ($hierarchicalData as $index => $subworkload)
+                                <option value="{{ $subworkload['subworkload']->id }}">
+                                    {{ $subworkload['subworkload']->name }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -353,20 +382,29 @@
             let move_subworkload_name
             $('.modal-move-subjects').on('click', function() {
                 move_subworkloadId = $(this).attr('subworkload_id');
+                console.log(move_subworkloadId)
                 move_userid = $(this).attr('user_id');
                 move_subworkload_name = $(this).attr('subworkload_name');
 
+                $(`.main-show-per-subworkload`).hide();
+                $(`.show-per-subworkload-${move_subworkloadId}`).show();
                 $('.modal_subworkload_name').val(move_subworkload_name)
             });
+
             $('.move-subject').on('click', function() {
                 let modal_move_professor_2 = $('.modal_professor_2').val();
+                let modal_professor_1 = $('.modal_professor_1').val();
+                if (modal_professor_1 == 0) {
+                    alert('กรุณาเลือกภาระงานย่อย')
+                    return
+                }
                 if (modal_move_professor_2 == 0) {
-                    alert('กรุณาเลือกอาจารย์')
+                    alert('กรุณาเลือกหัวข้อภาระงาน')
                     return
                 }
                 console.log(modal_move_professor_2)
                 axios.put(
-                        `/move-subject/${move_subworkloadId}/${move_userid}/${modal_move_professor_2}`
+                        `/move-subject/${modal_professor_1}/${move_userid}/${modal_move_professor_2}`
                     ) //ID ที่โยก , เจ้าของภาระงาน , ID User ปลายทางที่รับภาระงาน
                     .then(function(response) {
                         alert('โยกย้ายภาระงานสำเร็จ!')

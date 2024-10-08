@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'admin',
+                'professor_group' => '0',
                 'rank' => '0',
             ],
             [
@@ -36,6 +37,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'staff@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '0',
                 'rank' => '1',
             ],
             [
@@ -43,6 +45,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'professor1@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '1',
                 'rank' => '2',
             ],
             [
@@ -50,6 +53,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'professor2@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '1',
                 'rank' => '2',
             ],
             [
@@ -57,6 +61,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'test_member1@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '0',
                 'rank' => '6',
             ],
             [
@@ -64,6 +69,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'test_member2@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '0',
                 'rank' => '5',
             ],
             [
@@ -71,6 +77,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'test_member3@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '0',
                 'rank' => '4',
             ],
             [
@@ -78,6 +85,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'test_member4@mail.com',
                 'password' => Hash::make('123456'),
                 'role' => 'user',
+                'professor_group' => '0',
                 'rank' => '3',
             ],
         ];

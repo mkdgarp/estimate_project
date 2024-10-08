@@ -115,13 +115,13 @@
                                                 <td>
 
                                                     @if ($list_subworkload->is_child == 1)
-                                                    {{ $list_subworkload->name }}
+                                                        {{ $list_subworkload->name }}
                                                     @else
-                                                        <div class="w-100 d-flex">
+                                                        {{-- <div class="w-100 d-flex">
                                                             <p class="ps-4 pb-0 mb-0">
                                                                 -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
 
-                                                        </div>
+                                                        </div> --}}
                                                     @endif
 
 
@@ -131,7 +131,7 @@
                                                     @if ($list_subworkload->file_path == '')
                                                         <small class="text-muted text-none-onprint"></small>
                                                     @else
-                                                        @php
+                                                        {{-- @php
                                                             // Get the file extension
                                                             $fileExtension = strtolower(
                                                                 pathinfo(
@@ -139,9 +139,9 @@
                                                                     PATHINFO_EXTENSION,
                                                                 ),
                                                             );
-                                                        @endphp
+                                                        @endphp --}}
 
-                                                        @if (in_array($fileExtension, ['jpg', 'jpeg', 'png']))
+                                                        {{-- @if (in_array($fileExtension, ['jpg', 'jpeg', 'png']))
                                                             <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
                                                                 target="_blank">
                                                                 <embed type="image/jpg"
@@ -154,9 +154,17 @@
                                                                 target="_blank">
                                                                 <i class='bx bxs-file text-primary'></i>
                                                             </a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
+                                                    @if ($list_subworkload->is_child == 1)
+                                                        {{-- {{ $list_subworkload->name }} --}}
+                                                    @else
+                                                        <div class="w-100 d-flex">
+                                                            <p class=" pb-0 mb-0">
+                                                                {{ $list_subworkload->name }}</p>
 
+                                                        </div>
+                                                    @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child == 0)

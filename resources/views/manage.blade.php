@@ -18,6 +18,7 @@
                                 <th class="px-4 py-2">Email</th>
                                 {{-- <th class="px-4 py-2">Role</th> --}}
                                 <th class="px-4 py-2">Rank</th>
+                                <th class="px-4 py-2">Group</th>
                                 {{-- <th class="px-4 py-2">position</th> --}}
                                 {{-- <th class="px-4 py-2">department</th>
                                 <th class="px-4 py-2">salary</th>
@@ -50,13 +51,31 @@
 
                                         </td>
                                         <td>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                                onsubmit="return confirm('คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input type="hidden" name="user_id" value="{{ $user->id }}">
-                                                <button class="btn btn-outline-danger" type="submit">ลบ</button>
-                                            </form>
+                                            @if ($user->professor_group === '0')
+                                                <p>-</p>
+                                            @elseif ($user->professor_group === '1')
+                                                <p>กลุ่มทั่วไป</p>
+                                            @elseif ($user->professor_group === '2')
+                                                <p>กลุ่มเน้นสอน</p>
+                                            @elseif ($user->professor_group === '3')
+                                                <p>กลุ่มเน้นวิจัย</p>
+                                            @elseif ($user->professor_group === '4')
+                                                <p>กลุ่มเน้นบริการวิชาการ</p>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            {{-- <div>
+                                                <button class="btn btn-outline-warning">แก้ไข</button>
+                                            </div> --}}
+                                            <div>
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                                    onsubmit="return confirm('คุณแน่ใจว่าต้องการลบผู้ใช้นี้หรือไม่?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input type="hidden" name="user_id" value="{{ $user->id }}">
+                                                    <button class="btn btn-outline-danger" type="submit">ลบ</button>
+                                                </form>
+                                            </div>
                                         </td>
 
                                         {{-- <td class="border px-4 py-2">{{ $user->position }}</td> --}}

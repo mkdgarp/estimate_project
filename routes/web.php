@@ -37,6 +37,10 @@ route::get('/staff-manage-subworkload-list-by-id/{userId}/{workloadId}', [ForSup
 route::get('/view-report-by-id/{userId}/{workloadId}', [ForSuperAdminController::class, 'summary'])->name('summary-by-id');
 route::get('/print-all-workload/{userId}', [ForSuperAdminController::class, 'print_all_workload'])->name('print-all-workload');
 Route::post('/subworkloads/update-scores', [SubworkloadController::class, 'updateScores'])->name('subworkloads.updateScores');
+// web.php
+Route::get('/search-users', [UserController::class, 'searchUsers']);
+Route::get('/fetch-user-workloads/{userId}', [UserController::class, 'fetchUserWorkloads']);
+
 
 Route::get('/users/create', [UserController::class, 'create'])
     ->middleware(['auth', 'verified'])
@@ -47,7 +51,7 @@ Route::get('/users/create', [UserController::class, 'create'])
 //     ->name('users.store');
 Route::post('/users', [UserController::class, 'store'])->name('users.store');
 // /move-subject/${move_subworkloadId}/${move_userid}/${modal_move_professor_2}
-Route::put('/move-subject/{subworkloadId}/{own_userid}/{final_userid}', [ForSuperAdminController::class, 'move_subject'])->name('move_subject.update');
+Route::put('/move-subject/{subworkloadId}/{own_userid}/{final_userid}', [ForSuperAdminController::class, 'move_subject_inuser'])->name('move_subject.update');
 
 route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 route::delete('/images/{id}/{userId}', [UserController::class, 'destroy_score'])->name('images.destroy');

@@ -340,52 +340,63 @@ class WorkloadController extends Controller
         return view('summary', compact('workload', 'hierarchicalData', 'totalScore', 'finalScore'));
     }
 
-    public function view_report()
+    public function view_report(Request $request)
     {
-        // Fetch the workload
-        $workloads = Workload::get();
+        // Fetch the search query from the request
+        $query = $request->get('query', null);  // Default to null if no query
 
-        // Fetch the subworkloads associated with the workload
+        // Fetch all workloads and subworkloads
+        $workloads = Workload::get();
         $subworkloads = Subworkload::get();
         $subworkloads_id = $subworkloads->pluck('id');
 
-        // Fetch all users except the current authenticated user and admins with rank == 2
-        $user = User::where('rank', '2')->get();
+        // Fetch users (only rank == 2), and filter by the search query if present
+        $userQuery = User::where('rank', '2');
+        if ($query) {
+            $userQuery->where('name', 'LIKE', "%{$query}%");
+        }
+        $user = $userQuery->get();
 
         // Fetch list_subworkloads and join with scores for each user
         $list_subworkloads = ListSubworkload::select('list_subworkloads.*')
             ->leftJoin('scores', function ($join) use ($user) {
                 $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
-                    ->whereIn('scores.user_id', $user->pluck('id')); // Use user IDs from the filtered users
+                    ->whereIn('scores.user_id', $user->pluck('id'));
             })
             ->selectRaw('IFNULL(scores.score, 0) as score')
-            ->selectRaw('scores.file_path')
-            // ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
+            ->selectRaw('list_subworkloads.factor')
+            ->selectRaw('scores.user_id')  // Include user_id in the selection
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
             ->orderBy('list_subworkloads.sort_order', 'desc')
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
+        // Calculate total scores per user
+        $arrTotalScore = [];
+        foreach ($list_subworkloads as $list_subworkload) {
+            $userId = $list_subworkload->user_id;
+            $score = $list_subworkload->score * $list_subworkload->factor;
+
+            if (!isset($arrTotalScore[$userId])) {
+                $arrTotalScore[$userId] = 0; // Initialize total score for this user
+            }
+
+            $arrTotalScore[$userId] += $score; // Sum scores
+        }
+
         // Organize hierarchical data
         $hierarchicalData = [];
-
         foreach ($subworkloads as $subworkload) {
-            // Prepare the subworkload data
             $subworkloadArray = [
                 'subworkload' => $subworkload,
                 'list_subworkloads' => $list_subworkloads->filter(function ($list_subworkload) use ($subworkload) {
                     return $list_subworkload->subworkload_id == $subworkload->id;
                 })
             ];
-
-            // Add the subworkload data to hierarchicalData
             $hierarchicalData[] = $subworkloadArray;
         }
 
-        // Calculate the total score across all subworkloads for users with rank == 2
-        $totalScore = $list_subworkloads->sum('score');
-
-        // Return the view with the calculated data
-        return view('view-report', compact('workloads', 'hierarchicalData', 'totalScore', 'user'));
+        // Return the view with the calculated data and search query (if any)
+        return view('view-report', compact('workloads', 'hierarchicalData', 'user', 'arrTotalScore', 'query'));
     }
 }

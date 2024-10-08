@@ -56,6 +56,18 @@
                             </select>
                         </div>
                         <div class="mb-4">
+                            <label class="block text-gray-700">กลุ่มภาระงาน <small class="text-muted">(ไม่บังคับ)</small></label>
+                            <select name="professor_group"
+                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+                                required>
+                                <option value="0">ไม่มี (สำหรับสมาชิกที่ไม่ใช่อาจารย์)</option>
+                                <option value="1">กลุ่มทั่วไป</option>
+                                <option value="2">กลุ่มเน้นสอน</option>
+                                <option value="3">กลุ่มเน้นวิจัย</option>
+                                <option value="4">กลุ่มเน้นบริการวิชาการ</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
                             <x-primary-button type="submit"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 เพิ่มผู้ใช้งาน

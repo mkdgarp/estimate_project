@@ -21,7 +21,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'rank'
+        'rank',
+        'professor_group' //กลุ่มอาจารย์
     ];
 
     /**

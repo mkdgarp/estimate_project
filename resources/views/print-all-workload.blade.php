@@ -1,7 +1,11 @@
 <x-app-layout>
     <style>
         @media print {
-            .pagebreak { page-break-before: always;clear: both; }
+            .pagebreak {
+                page-break-before: always;
+                clear: both;
+            }
+
             /* Ensure the page is A4 */
             @page {
                 size: A4;
@@ -149,11 +153,11 @@
                                                     @if ($list_subworkload->is_child == 1)
                                                         {{ $list_subworkload->name }}
                                                     @else
-                                                        <div class="w-100 d-flex">
+                                                        {{-- <div class="w-100 d-flex">
                                                             <p class="ps-4 pb-0 mb-0">
                                                                 -&nbsp;&nbsp;{{ $list_subworkload->name }}</p>
 
-                                                        </div>
+                                                        </div> --}}
                                                     @endif
 
 
@@ -162,7 +166,7 @@
                                                     @if ($list_subworkload->file_path == '')
                                                         <small class="text-muted text-none-onprint"></small>
                                                     @else
-                                                        @php
+                                                        {{-- @php
                                                             // Get the file extension
                                                             $fileExtension = strtolower(
                                                                 pathinfo(
@@ -170,9 +174,9 @@
                                                                     PATHINFO_EXTENSION,
                                                                 ),
                                                             );
-                                                        @endphp
+                                                        @endphp --}}
 
-                                                        @if (in_array($fileExtension, ['jpg', 'jpeg', 'png']))
+                                                        {{-- @if (in_array($fileExtension, ['jpg', 'jpeg', 'png']))
                                                             <a href="{{ url('storage/' . $list_subworkload->file_path) }}"
                                                                 target="_blank">
                                                                 <embed type="image/jpg"
@@ -185,9 +189,17 @@
                                                                 target="_blank">
                                                                 <i class='bx bxs-file text-primary'></i>
                                                             </a>
-                                                        @endif
+                                                        @endif --}}
                                                     @endif
+                                                    @if ($list_subworkload->is_child == 1)
+                                                        {{-- {{ $list_subworkload->name }} --}}
+                                                    @else
+                                                        <div class="w-100 d-flex">
+                                                            <p class=" pb-0 mb-0">
+                                                                {{ $list_subworkload->name }}</p>
 
+                                                        </div>
+                                                    @endif
                                                 </td>
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child == 0)
@@ -298,17 +310,24 @@
                                 <tr>
                                     <td>
                                         <b><u>๑. ภาระงานสอน (ภาระงานขั้นต่ำ)</u></b><br>
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มทั่วไป ๑๕
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 1 ? 'checked' : '' }}>กลุ่มทั่วไป
+                                            ๑๕
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นสอน ๒๐
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 2 ? 'checked' : '' }}>กลุ่มเน้นสอน
+                                            ๒๐
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นวิจัย ๙
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 3 ? 'checked' : '' }}>กลุ่มเน้นวิจัย
+                                            ๙
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 "
-                                                type="checkbox">กลุ่มเน้นบริการวิชาการ ๙ ภาระงาน/สัปดาห์</div>
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 4 ? 'checked' : '' }}>กลุ่มเน้นบริการวิชาการ
+                                            ๙ ภาระงาน/สัปดาห์</div>
 
                                     </td>
                                     <td class="text-center">{{ $total_1 }}</td>
@@ -318,17 +337,23 @@
                                     <td>
                                         <b><u>๒. ภาระงานวิจัยและงานวิชาการอื่นที่ปรากฏเป็นผลงานวิชาการตามหลักเกณฑ์ที่
                                                 ก.พ.อ กำหนด</u></b><br>
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มทั่วไป ๖
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 1 ? 'checked' : '' }}>กลุ่มทั่วไป
+                                            ๖
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นสอน ๖
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 2 ? 'checked' : '' }}>กลุ่มเน้นสอน
+                                            ๖
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นวิจัย
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 3 ? 'checked' : '' }}>กลุ่มเน้นวิจัย
                                             ๒๑ ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 "
-                                                type="checkbox">กลุ่มเน้นบริการวิชาการ ๖ ภาระงาน/สัปดาห์</div>
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 4 ? 'checked' : '' }}>กลุ่มเน้นบริการวิชาการ
+                                            ๖ ภาระงาน/สัปดาห์</div>
 
                                     </td>
                                     <td class="text-center">{{ $total_2 }}</td>
@@ -337,17 +362,23 @@
                                 <tr>
                                     <td>
                                         <b><u>๓. ภาระงานบริการทางวิชาการ</u></b><br>
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มทั่วไป ๕
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 1 ? 'checked' : '' }}>กลุ่มทั่วไป
+                                            ๕
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นสอน ๓
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 2 ? 'checked' : '' }}>กลุ่มเน้นสอน
+                                            ๓
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นวิจัย
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 3 ? 'checked' : '' }}>กลุ่มเน้นวิจัย
                                             ๒ ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 "
-                                                type="checkbox">กลุ่มเน้นบริการวิชาการ ๑๗ ภาระงาน/สัปดาห์</div>
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 4 ? 'checked' : '' }}>กลุ่มเน้นบริการวิชาการ
+                                            ๑๗ ภาระงาน/สัปดาห์</div>
 
                                     </td>
                                     <td class="text-center">{{ $total_3 }}</td>
@@ -356,17 +387,23 @@
                                 <tr>
                                     <td>
                                         <b><u>๔. ภาระงานทำนุบำรุงศิลปวัฒธรรม</u></b><br>
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มทั่วไป ๓
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 1 ? 'checked' : '' }}>กลุ่มทั่วไป
+                                            ๓
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นสอน ๓
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 2 ? 'checked' : '' }}>กลุ่มเน้นสอน
+                                            ๓
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นวิจัย
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 3 ? 'checked' : '' }}>กลุ่มเน้นวิจัย
                                             ๒ ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 "
-                                                type="checkbox">กลุ่มเน้นบริการวิชาการ ๒ ภาระงาน/สัปดาห์</div>
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 4 ? 'checked' : '' }}>กลุ่มเน้นบริการวิชาการ
+                                            ๒ ภาระงาน/สัปดาห์</div>
 
                                     </td>
                                     <td class="text-center">{{ $total_4 }}</td>
@@ -375,17 +412,23 @@
                                 <tr>
                                     <td>
                                         <b><u>๕. ภาระงานอื่น ๆ ที่สอดคล้องกับพันธกิจของคณะ มหาวิทยาลัย</u></b><br>
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มทั่วไป ๖
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 1 ? 'checked' : '' }}>กลุ่มทั่วไป
+                                            ๖
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นสอน ๓
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 2 ? 'checked' : '' }}>กลุ่มเน้นสอน
+                                            ๓
                                             ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox">กลุ่มเน้นวิจัย
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 3 ? 'checked' : '' }}>กลุ่มเน้นวิจัย
                                             ๑ ภาระงาน/สัปดาห์</div>
 
-                                        <div class="mb-2"><input class="ms-4 me-2 "
-                                                type="checkbox">กลุ่มเน้นบริการวิชาการ ๑ ภาระงาน/สัปดาห์</div>
+                                        <div class="mb-2"><input class="ms-4 me-2 " type="checkbox"
+                                                {{ Auth::user()->professor_group == 4 ? 'checked' : '' }}>กลุ่มเน้นบริการวิชาการ
+                                            ๑ ภาระงาน/สัปดาห์</div>
 
                                     </td>
                                     <td class="text-center">{{ $total_5 }}</td>
@@ -401,7 +444,8 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                        <b><u>๗. ภาระงานที่ได้รับการแต่งตั้งให้ดำรงตำแหน่งและงานที่ได้รับมอบหมายอื่น ๆ</u></b>
+                                        <b><u>๗. ภาระงานที่ได้รับการแต่งตั้งให้ดำรงตำแหน่งและงานที่ได้รับมอบหมายอื่น
+                                                ๆ</u></b>
 
                                     </td>
                                     <td class="text-center">{{ $total_7 }}</td>

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use App\Models\ListSubworkload;
+use App\Models\Workload;
 
 class UserController extends Controller
 {
@@ -32,6 +33,7 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'role' => 'required|string',
             'rank' => 'required|integer',
+            'professor_group' => 'required',
         ]);
 
         // Create a new user
@@ -41,6 +43,7 @@ class UserController extends Controller
             'password' => Hash::make($validatedData['password']),
             'role' => $validatedData['role'],
             'rank' => $validatedData['rank'],
+            'professor_group' => $validatedData['professor_group'],
         ]);
 
         // Redirect back with success message
@@ -91,10 +94,30 @@ class UserController extends Controller
             // ตั้งค่า file_path เป็น NULL
             $score->delete();
             $list_subject->delete();
-            
+
             return response()->json(['message' => 'ลบภาระงานสำเร็จ'], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'ไม่พบเรคคอร์ดที่ต้องการ'], 404);
         }
+    }
+
+    // UserController.php
+    public function searchUsers(Request $request)
+    {
+        $query = $request->get('query', '');
+
+        $users = User::where('name', 'LIKE', "%{$query}%")->where('rank', '2')->get(['id', 'name']);
+
+        return response()->json($users);
+    }
+
+
+    public function fetchUserWorkloads($userId)
+    {
+        $workloads = Workload::where('user_id', $userId)->get();
+
+        return response()->json([
+            'workloads' => $workloads
+        ]);
     }
 }

@@ -6,6 +6,9 @@
         @csrf
 
         <!-- Email Address -->
+        <div style="font-size:16px;" class="mb-3 pb-3 p-1 text-center">
+            <b>ระบบจัดเก็บเอกสารข้อตกลงและแบบประเมินผลกาคปฏิบัติ<br>งานของบุคลากรสายวิชาการด้านผลสัมฤทธิ์ของงาน</b>
+        </div>
         <div>
             <x-input-label for="email" :value="__('อีเมล')" />
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />

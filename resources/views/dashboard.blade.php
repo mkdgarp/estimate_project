@@ -11,19 +11,19 @@
                 <div class="p-6 text-gray-900">
                     {{-- ตรวจสอบ role --}}
                     @if (Auth::user()->role === 'admin')
-                        <p>ยินดีต้อนรับ, แอดมิน! {{Auth::user()->name}}</p>
+                        <p>ยินดีต้อนรับ, แอดมิน {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '1')
-                        <p>ยินดีต้อนรับ, เจ้าหน้าที่! {{Auth::user()->name}}</p>
+                        <p>ยินดีต้อนรับ, เจ้าหน้าที่ {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '2')
-                        <p>ยินดีต้อนรับ, อาจารย์! {{Auth::user()->name}}</p>
+                        <p>ยินดีต้อนรับ, อาจารย์ {{Auth::user()->name}}</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '3')
-                        <p>ยินดีต้อนรับ, หัวหน้าหลักสูตร/สาขา/กลุ่มวิชา!</p>
+                        <p>ยินดีต้อนรับ, หัวหน้าหลักสูตร/สาขา/กลุ่มวิชา</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '4')
-                        <p>ยินดีต้อนรับ, หัวหน้าสาขา!</p>
+                        <p>ยินดีต้อนรับ, หัวหน้าสาขา</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '5')
-                        <p>ยินดีต้อนรับ, ผู้ช่วยคณบดี!</p>
+                        <p>ยินดีต้อนรับ, ผู้ช่วยคณบดี</p>
                     @elseif (Auth::user()->role === 'user' && Auth::user()->rank === '6')
-                        <p>ยินดีต้อนรับ, รองคณบดี!</p>
+                        <p>ยินดีต้อนรับ, รองคณบดี</p>
                     @endif
                 </div>
             </div>
