@@ -50,13 +50,14 @@
                         <div class="col-3">
                             <label for="year">ปี</label>
                             <select class="form-select" name="year">
-                                @for ($x = 0; $x < 5; $x++)
-                                    <option value="{{ date('Y') - $x }}"
-                                        {{ $year == date('Y') - $x ? 'selected' : '' }}>
-                                        {{ date('Y') - $x }}
+                                @for ($x = 5; $x >= -5; $x--)
+                                    <option value="{{ date('Y') + $x }}"
+                                        {{ $year == date('Y') + $x ? 'selected' : '' }}>
+                                        {{ date('Y') + $x }}
                                     </option>
                                 @endfor
                             </select>
+                            
                         </div>
                         <div class="col-3">
                             <label for="times">ครั้งที่</label>
