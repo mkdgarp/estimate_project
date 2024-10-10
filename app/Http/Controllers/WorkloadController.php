@@ -54,14 +54,23 @@ class WorkloadController extends Controller
     //     return view('workload-list', compact('workloads', 'totalScore'));
     // }
 
-    public function index()
+    public function index(Request $request)
     {
         $userId = auth()->id();
 
-        // Fetch all workloads, subworkloads, list_subworkloads, and scores
+        // รับค่าปีและจำนวนครั้งจากฟอร์ม
+        $year = $request->input('year', date('Y')); // ใช้ปีปัจจุบันเป็นค่าเริ่มต้น
+        $times = $request->input('times', 1); // ใช้ครั้งที่ 1 เป็นค่าเริ่มต้น
+
+        // Fetch workloads, subworkloads, list_subworkloads, and scores
         $workloads = Workload::all();
         $subworkloads = Subworkload::all();
-        $listSubworkloads = ListSubworkload::all();
+
+        // กรองข้อมูลใน ListSubworkload โดยใช้ year และ times
+        $listSubworkloads = ListSubworkload::where('year', $year)
+            ->where('times', $times)
+            ->get();
+
         $scores = Score::where('user_id', $userId)->get();
 
         // Create a collection with the joined data
@@ -95,8 +104,9 @@ class WorkloadController extends Controller
         // Calculate the total score for all Workloads
         $totalScore = (float) $workloads->sum('totalScore'); // Ensure totalScore is a float
 
-        return view('workload-list', compact('workloads', 'totalScore'));
+        return view('workload-list', compact('workloads', 'totalScore', 'year', 'times'));
     }
+
 
     public function calTotalScorePerWorkload($id, $workloadId)
     {
@@ -240,18 +250,23 @@ class WorkloadController extends Controller
     //     return view('subworkload-list', compact('workload', 'hierarchicalData', 'totalScore'));
     // }
 
-    public function show($id)
+    public function show(Request $request, $workloadId)
     {
         $userId = auth()->id();
 
-        // Fetch the workload
-        $workload = Workload::findOrFail($id);
+        // ดึงค่า year และ times จาก request
+        $year = $request->input('year');
+        $times = $request->input('times');
+        $professor_group = $request->input('professor_group');
 
-        // Fetch the subworkloads associated with the workload
-        $subworkloads = Subworkload::where('workload_id', $id)->get();
+        // Fetch the workload โดยใช้ workloadId แทน userId
+        $workload = Workload::findOrFail($workloadId);
+
+        // Fetch the subworkloads ที่เกี่ยวข้องกับ workload
+        $subworkloads = Subworkload::where('workload_id', $workloadId)->get();
         $subworkloads_id = $subworkloads->pluck('id');
 
-        // Fetch list_subworkloads and join with scores, ordered by list_subworkloads.id
+        // Fetch list_subworkloads และ join กับ scores โดยใช้เงื่อนไข user_id, year, และ times
         $list_subworkloads = ListSubworkload::select('list_subworkloads.*')
             ->leftJoin('scores', function ($join) use ($userId) {
                 $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
@@ -259,19 +274,25 @@ class WorkloadController extends Controller
             })
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('scores.file_path')
+            ->where(function ($query) use ($year) {
+                $query->where('list_subworkloads.year', $year)
+                    ->orWhereNull('list_subworkloads.year'); // ใช้ orWhereNull แทน whereIn
+            })
+            ->where(function ($query) use ($times) {
+                $query->where('list_subworkloads.times', $times)
+                    ->orWhereNull('list_subworkloads.times'); // ใช้ orWhereNull แทน whereIn
+            })
             ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
-            // ->orderBy('list_subworkloads.subworkload_id', 'asc') // Order by list_subworkloads.id ascending
-            // ->orderBy('list_subworkloads.id', 'asc') // Order by list_subworkloads.id ascending
             ->orderBy('list_subworkloads.sort_order', 'desc')
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
-        // Organize hierarchical data
+        // จัดระเบียบข้อมูลแบบ hierarchical
         $hierarchicalData = [];
 
         foreach ($subworkloads as $subworkload) {
-            // Prepare the subworkload data
+            // เตรียมข้อมูล subworkload
             $subworkloadArray = [
                 'subworkload' => $subworkload,
                 'list_subworkloads' => $list_subworkloads->filter(function ($list_subworkload) use ($subworkload) {
@@ -279,21 +300,25 @@ class WorkloadController extends Controller
                 })
             ];
 
-            // Add the subworkload data to hierarchicalData
+            // เพิ่มข้อมูลลงใน hierarchicalData
             $hierarchicalData[] = $subworkloadArray;
         }
 
-        // Calculate the total score across all subworkloads
+        // คำนวณคะแนนรวมของ subworkloads
         $totalScore = $list_subworkloads->sum('score');
 
-        // Return the view with the calculated data
+        // ส่งข้อมูลไปที่ view
         return view('subworkload-list', compact('workload', 'hierarchicalData', 'totalScore'));
     }
 
-    public function summary($id)
+
+    public function summary(Request $request, $id)
     {
         $userId = auth()->id();
-
+        // ดึงค่า year และ times จาก request
+        $year = $request->input('year');
+        $times = $request->input('times');
+        $professor_group = $request->input('professor_group');
         // Fetch the workload
         $workload = Workload::findOrFail($id);
 
@@ -310,6 +335,14 @@ class WorkloadController extends Controller
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('scores.file_path')
             ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
+            ->where(function ($query) use ($year) {
+                $query->where('list_subworkloads.year', $year)
+                    ->orWhereNull('list_subworkloads.year'); // ใช้ orWhereNull แทน whereIn
+            })
+            ->where(function ($query) use ($times) {
+                $query->where('list_subworkloads.times', $times)
+                    ->orWhereNull('list_subworkloads.times'); // ใช้ orWhereNull แทน whereIn
+            })
             ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
             ->whereIn('list_subworkloads.subworkload_id', $subworkloads_id)
             ->orderBy('list_subworkloads.sort_order', 'desc')
@@ -344,6 +377,9 @@ class WorkloadController extends Controller
     {
         // Fetch the search query from the request
         $query = $request->get('query', null);  // Default to null if no query
+        // รับค่าปีและจำนวนครั้งจากฟอร์ม
+        $year = $request->input('year', date('Y')); // ใช้ปีปัจจุบันเป็นค่าเริ่มต้น
+        $times = $request->input('times', 1); // ใช้ครั้งที่ 1 เป็นค่าเริ่มต้น
 
         // Fetch all workloads and subworkloads
         $workloads = Workload::get();
@@ -363,6 +399,8 @@ class WorkloadController extends Controller
                 $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
                     ->whereIn('scores.user_id', $user->pluck('id'));
             })
+            ->where('year', $year)
+            ->where('times', $times)
             ->selectRaw('IFNULL(scores.score, 0) as score')
             ->selectRaw('list_subworkloads.factor')
             ->selectRaw('scores.user_id')  // Include user_id in the selection

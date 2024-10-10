@@ -23,6 +23,9 @@
                         @csrf
                         <input type="hidden" name="user_id" value="{{ $user->id }}">
                         <input type="hidden" name="workload_id" value="{{ $workload->id }}">
+                        <input type="hidden" name="year" value="{{ request('year', date('Y')) }}">
+                        <input type="hidden" name="times" value="{{ request('times', 1) }}">
+                        <input type="hidden" name="professor_group" value="{{ request('professor_group', 1) }}">
 
 
 

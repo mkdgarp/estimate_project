@@ -24,7 +24,9 @@ return new class extends Migration
             $table->integer('is_leader')->default(0); //หัวหน้าหรือไม่ ? 0=ไม่
             $table->integer('is_country')->default(0); //ต่างประเทศหรือไม่ ? 0=ไม่
             $table->unsignedBigInteger('list_subworkloads_child_id')->nullable();
-            
+            $table->enum('times', ['1', '2'])->nullable()->default(null); // 0 =ไม่มี
+            $table->enum('professor_group', ['1', '2', '3', '4'])->nullable()->default(null); // 0 =ไม่มี
+            $table->text('year');
             $table->timestamps();
             
             // $table->foreign('list_subworkloads_child_id')->references('id')->on('list_subworkloads')->onDelete('cascade');

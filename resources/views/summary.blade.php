@@ -109,7 +109,7 @@
                                 <thead>
                                     <tr>
                                         <th class="thmain text-center">(๑)<br>ภาระงาน/กิจกรรม/โครงการ/งาน</th>
-                                        <th class="text-center" width='120px'>(๒)<br>หลักฐาน</th>
+                                        <th class="text-center" width='200px'>(๒)<br>หลักฐาน</th>
                                         <th class="text-center" width='80px'>(๓)<br>จำนวน</th>
                                         <th class="text-center" width='80px'>(๔)<br>ภาระงาน</th>
                                         <th class="text-center" width='80px'>(๕)<br>รวมภาระงาน<br>(๓ x ๔)</th>
