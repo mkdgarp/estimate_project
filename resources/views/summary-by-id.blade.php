@@ -99,8 +99,8 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="thmain">ภาระงานย่อย</th>
-                                        <th width='200px'>หลักฐาน</th>
+                                        <th width='35%' class="thmain">ภาระงานย่อย</th>
+                                        <th width='35%'>หลักฐาน</th>
                                         <th class="text-center" width='80px'>จำนวน</th>
                                         <th class="text-center" width='80px'>ภาระงาน</th>
                                         <th class="text-center" width='80px'>รวม</th>
