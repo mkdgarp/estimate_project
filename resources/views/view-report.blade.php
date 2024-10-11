@@ -53,10 +53,11 @@
                                 @for ($x = 5; $x >= -5; $x--)
                                     <option value="{{ date('Y') + $x }}"
                                         {{ $year == date('Y') + $x ? 'selected' : '' }}>
-                                        {{ date('Y') + $x }}
+                                        {{ (date('Y') + $x) + 543 }} <!-- แสดงปีเป็น พ.ศ. -->
                                     </option>
                                 @endfor
                             </select>
+                            
                             
                         </div>
                         <div class="col-3">
@@ -87,7 +88,7 @@
                 <div class="p-6 text-gray-900">
                     {{-- {{ $user }} --}}
                     <div>
-                        <b>ข้อมูลสำหรับปี {{ $year }} ครั้งที่ {{ $times }}</b>
+                        <b>ข้อมูลสำหรับปี {{ ($year + 543) }} ครั้งที่ {{ $times }}</b>
                     </div>
                     <div class="text-end row">
 
