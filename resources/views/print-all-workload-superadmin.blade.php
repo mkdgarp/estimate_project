@@ -532,7 +532,8 @@
             }, 250);
 
             window.onafterprint = function() {
-                window.location.href = "../view-report"; // Change to your desired URL
+                // window.location.href = "../view-report"; // Change to your desired URL
+                window.close();
             };
             // $('.autoprint').click()
         })

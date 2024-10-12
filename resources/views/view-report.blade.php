@@ -327,7 +327,7 @@
             let year = {{ $year }}
             let times = {{ $times }}
             // console.log(select_professor_group);
-            location.replace(
+            window.open(
                 `../print-all-workload-superadmin/${user_id}?year=${year}&times=${times}&professor_group=${select_professor_group}`
             );
         });

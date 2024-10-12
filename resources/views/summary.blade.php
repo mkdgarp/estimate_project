@@ -4,6 +4,10 @@
             {{ $workload->name }}
         </h2>
     </x-slot>
+    @php
+        $year = request('year', date('Y')); // ถ้าไม่มีค่า year จะใช้ปีปัจจุบัน
+        $times = request('times', 1); // ถ้าไม่มีค่า times จะใช้ค่า 1
+    @endphp
     <style>
         @media print {
 
@@ -108,7 +112,8 @@
                             <table class="table table-bordered border-right">
                                 <thead>
                                     <tr>
-                                        <th class="thmain text-center" width='35%'>(๑)<br>ภาระงาน/กิจกรรม/โครงการ/งาน</th>
+                                        <th class="thmain text-center" width='35%'>(๑)<br>ภาระงาน/กิจกรรม/โครงการ/งาน
+                                        </th>
                                         <th class="text-center" width='35%'>(๒)<br>หลักฐาน</th>
                                         <th class="text-center" width='80px'>(๓)<br>จำนวน</th>
                                         <th class="text-center" width='80px'>(๔)<br>ภาระงาน</th>
@@ -232,10 +237,10 @@
                 </form>
 
                 <div class="mt text-center mb-4">
-                    <a href="{{ route('workloads.show', $workload->id) }}">
+                    <a href="{{ route('workloads.show', ['id' => $workload->id]) }}?year={{ $year }}&times={{ $times }}&professor_group={{ Auth::user()->professor_group }}">
                         <x-primary-button type="button" class="btn btn-warning">แก้ไขข้อมูล</x-primary-button>
                     </a>
-                    <a href="{{ route('workload') }}">
+                    <a href="{{ route('workload') }}?year={{ $year }}&times={{ $times }}&professor_group={{ Auth::user()->professor_group }}">
                         <x-primary-button type="button" class="btn btn-success">ยืนยัน</x-primary-button>
                     </a>
                 </div>

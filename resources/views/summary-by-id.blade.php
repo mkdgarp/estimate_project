@@ -204,12 +204,15 @@
                 </div>
 
                 </form>
-
+                @php
+                    $year = request('year', date('Y')); // ถ้าไม่มีค่า year จะใช้ปีปัจจุบัน
+                    $times = request('times', 1); // ถ้าไม่มีค่า times จะใช้ค่า 1
+                @endphp
                 <div class="mt text-center mb-4">
-                    <a href="../../manage-subworkload-list-by-id/{{ $user->id }}/{{ $workload->id }}">
+                    <a href="../../manage-subworkload-list-by-id/{{ $user->id }}/{{ $workload->id }}?year={{ $year }}&times={{ $times }}&professor_group=1">
                         <x-primary-button type="button" class="btn btn-warning">แก้ไขข้อมูล</x-primary-button>
                     </a>
-                    <a href="{{ route('workloads.view-report') }}">
+                    <a href="{{ route('workloads.view-report') }}?year={{ $year }}&times={{ $times }}&professor_group=1">
                         <x-primary-button type="button" class="btn btn-success">ยืนยัน</x-primary-button>
                     </a>
                 </div>

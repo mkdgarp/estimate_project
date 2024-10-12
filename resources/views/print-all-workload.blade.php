@@ -532,7 +532,8 @@
             }, 250);
 
             window.onafterprint = function() {
-                window.location.href = "../workload"; // Change to your desired URL
+                // window.location.href = "../workload"; // Change to your desired URL
+                window.close();
             };
             // $('.autoprint').click()
         })
