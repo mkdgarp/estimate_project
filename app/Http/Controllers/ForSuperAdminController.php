@@ -354,32 +354,7 @@ class ForSuperAdminController extends Controller
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
-        $z5 = Subworkload::where('workload_id', 5)->get();
-        $x5 = $z5->pluck('id');
-        $list_5 = ListSubworkload::select('list_subworkloads.*')
-            ->leftJoin('scores', function ($join) use ($userId) {
-                $join->on('list_subworkloads.id', '=', 'scores.subworkload_id')
-                    ->where('scores.user_id', $userId);
-            })
-            ->selectRaw('scores.*')
-            ->selectRaw('IFNULL(scores.score, 0) as score')
-            ->selectRaw('scores.file_path')
-            ->selectRaw('IFNULL(scores.score, 0) * list_subworkloads.factor as finalScore')
-            ->where(function ($query) use ($year) {
-                $query->where('list_subworkloads.year', $year)
-                    ->orWhereNull('list_subworkloads.year'); // ใช้ orWhereNull แทน whereIn
-            })
-            ->where(function ($query) use ($times) {
-                $query->where('list_subworkloads.times', $times)
-                    ->orWhereNull('list_subworkloads.times'); // ใช้ orWhereNull แทน whereIn
-            })
-            ->whereIn('list_subworkloads.create_by', [$userId, 'SYSTEM'])
-            ->whereIn('list_subworkloads.subworkload_id', $x5)
-            ->orderBy('list_subworkloads.sort_order', 'desc')
-            ->orderBy('list_subworkloads.id', 'asc')
-            ->get();
-
-        $z6 = Subworkload::where('workload_id', 5)->get();
+        $z6 = Subworkload::where('workload_id', 6)->get();
         $x6 = $z6->pluck('id');
         $list_6 = ListSubworkload::select('list_subworkloads.*')
             ->leftJoin('scores', function ($join) use ($userId) {
@@ -404,7 +379,8 @@ class ForSuperAdminController extends Controller
             ->orderBy('list_subworkloads.id', 'asc')
             ->get();
 
-        $z7 = Subworkload::where('workload_id', 5)->get();
+
+        $z7 = Subworkload::where('workload_id', 7)->get();
         $x7 = $z7->pluck('id');
         $list_7 = ListSubworkload::select('list_subworkloads.*')
             ->leftJoin('scores', function ($join) use ($userId) {
