@@ -208,6 +208,7 @@ class SubworkloadController extends Controller
 
                     // รวมไฟล์เก่ากับไฟล์ใหม่
                     $combinedFilePaths = array_merge($oldFilePaths, $filePathsSubjects);
+                    $existingScore->score = (float) $subject['scores'];
                     $existingScore->file_path = json_encode(array_values(array_filter($combinedFilePaths))); // กรองค่าและรีเซ็ต index
 
 

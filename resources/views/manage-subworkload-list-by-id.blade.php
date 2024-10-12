@@ -201,13 +201,13 @@
                                                 <td class="text-center">
                                                     @if ($list_subworkload->is_child != 1)
                                                         <input type="number"
-                                                            name="scores[{{ $list_subworkload->id }}]"
+                                                            name="main[{{ $list_subworkload->id }}][scores]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
                                                             min="0" class="form-control text-center">
                                                     @else
-                                                        <input type="hidden"
+                                                        {{-- <input type="hidden"
                                                             name="scores[{{ $list_subworkload->id }}]" value="0"
-                                                            min="0" class="form-control text-center">
+                                                            min="0" class="form-control text-center"> --}}
                                                     @endif
 
                                                 </td>
