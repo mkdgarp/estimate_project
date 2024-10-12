@@ -166,9 +166,9 @@ class SubworkloadController extends Controller
             'main.*.files' => 'array',
             'main.*.files.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf,xlsx,xls,doc,docx|max:2048', // Validate individual files
         ]);
-// a
+        // a
         // Process subjects and their respective files
-        
+
         if ($main) {
             foreach ($main as $parentId => $subject) {
                 \Log::info('Received subject:', $subject);
@@ -292,21 +292,46 @@ class SubworkloadController extends Controller
         // Logic for redirection (same as before)
         if ($request->input('user_id')) {
             if ($request->input('is_staff')) {
+                $url = route('staff-manage-subworkload-list-by-id', [
+                    'userId' => $request->input('user_id'),
+                    'workloadId' => $workloadId,  // Correct parameter name
+                ]);
+
+                // Manually append the query string
+                $url .= "?times=$times&year=$year&professor_group=$professor_group";
+
                 // return  'อัพเดตข้อมูลสำเร็จ staff';
-                return redirect()->route('staff-manage-subworkload-list-by-id', [
-                    'userId' => $request->input('user_id'),
-                    'workloadId' => $workloadId,
-                ])->with('success', 'อัพเดตข้อมูลสำเร็จ!');
+                // return redirect()->route('staff-manage-subworkload-list-by-id', [
+                //     'userId' => $request->input('user_id'),
+                //     'workloadId' => $workloadId,
+                // ])->with('success', 'อัพเดตข้อมูลสำเร็จ!');
+                return redirect($url)->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
             } else {
-                // return  'อัพเดตข้อมูลสำเร็จ admin';
-                return redirect()->route('summary-by-id', [
+                $url = route('summary-by-id', [
                     'userId' => $request->input('user_id'),
-                    'workloadId' => $workloadId,
-                ])->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
+                    'workloadId' => $workloadId,  // Correct parameter name
+                ]);
+
+                // Manually append the query string
+                $url .= "?times=$times&year=$year&professor_group=$professor_group";
+
+                // return  'อัพเดตข้อมูลสำเร็จ admin';
+                // return redirect()->route('summary-by-id', [
+                //     'userId' => $request->input('user_id'),
+                //     'workloadId' => $workloadId,
+                // ])->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
+                return redirect($url)->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
             }
         } else {
-            return redirect()->route('workloads.summary', $workloadId)
-                ->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
+            $url = route('workloads.summary', [
+                'id' => $workloadId,  // Correct parameter name
+            ]);
+
+            // Manually append the query string
+            $url .= "?times=$times&year=$year&professor_group=$professor_group";
+
+            // Redirect to the URL with the success message
+            return redirect($url)->with('success', 'กรุณาตรวจสอบข้อมูลให้ครบถ้วนอีกครั้งก่อนกดยืนยัน');
         }
     }
 }
