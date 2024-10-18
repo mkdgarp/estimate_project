@@ -109,7 +109,7 @@ class UserController extends Controller
             // สมมติว่าคุณส่ง index และ subworkload_id มาทาง JSON
 
             // ค้นหา score ตาม subworkload_id
-            $score = Score::where('subworkload_id', $id)
+             $score = Score::where('subworkload_id', $id)
                 ->where('user_id', $userId)
                 ->firstOrFail();
 

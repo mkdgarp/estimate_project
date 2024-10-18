@@ -154,7 +154,7 @@
                                                                         type="button"
                                                                         image-by-id="{{ $list_subworkload->id }}"
                                                                         index-by-image="{{ $index }}"
-                                                                        user-id="{{ auth()->id() }}">
+                                                                        user-id="{{ $list_subworkload->create_by }}">
                                                                         <i class='bx bxs-trash'></i> ลบไฟล์
                                                                     </button>
                                                                 @endforeach
