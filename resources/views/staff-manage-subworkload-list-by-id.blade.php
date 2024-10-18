@@ -155,7 +155,7 @@
                                                                         type="button"
                                                                         image-by-id="{{ $list_subworkload->id }}"
                                                                         index-by-image="{{ $index }}"
-                                                                        user-id="{{  $list_subworkload->create_by }}">
+                                                                        user-id="{{ $list_subworkload->create_by }}">
                                                                         <i class='bx bxs-trash'></i> ลบไฟล์
                                                                     </button>
                                                                 @endforeach
@@ -204,7 +204,9 @@
                                                         <input type="number"
                                                             name="main[{{ $list_subworkload->id }}][scores]"
                                                             value="{{ number_format($list_subworkload->score, 0) }}"
-                                                            min="0" class="form-control text-center">
+                                                            min="0"
+                                                            class="form-control text-center border-0 bg-white"
+                                                            readonly>
                                                     @else
                                                         {{-- <input type="hidden"
                                                             name="scores[{{ $list_subworkload->id }}]" value="0"
@@ -230,6 +232,10 @@
                         @endforeach
 
                 </div>
+                @php
+                    $year = request('year', date('Y')); // ถ้าไม่มีค่า year จะใช้ปีปัจจุบัน
+                    $times = request('times', 1); // ถ้าไม่มีค่า times จะใช้ค่า 1
+                @endphp
                 <div class="mt text-center mb-4">
                     <a href="{{ route('workloads.view-report') }}">
                         <x-primary-button type="button" class="btn btn-secondary">ย้อนกลับ</x-primary-button>

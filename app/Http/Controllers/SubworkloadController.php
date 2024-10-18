@@ -293,7 +293,7 @@ class SubworkloadController extends Controller
         // Logic for redirection (same as before)
         if ($request->input('user_id')) {
             if ($request->input('is_staff')) {
-                $url = route('staff-manage-subworkload-list-by-id', [
+                $url = route('workloads.view-report', [
                     'userId' => $request->input('user_id'),
                     'workloadId' => $workloadId,  // Correct parameter name
                 ]);
